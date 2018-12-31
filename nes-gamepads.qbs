@@ -77,12 +77,12 @@ CppApplication {
         prefix: "Src/"
         files: [
             "main.c",
+            "stm32f4xx_hal_msp.c",
+            "stm32f4xx_it.c",
             "usb_device.c",
             "usbd_conf.c",
-            "usbd_desc.c",
             "usbd_custom_hid_if.c",
-            "stm32f4xx_it.c",
-            "stm32f4xx_hal_msp.c",
+            "usbd_desc.c",
         ]
     }
 
@@ -116,23 +116,24 @@ CppApplication {
         name: "HAL"
         prefix: "Drivers/STM32F4xx_HAL_Driver/Src/"
         files: [
-            "stm32f4xx_hal_pcd.c",
-            "stm32f4xx_hal_pcd_ex.c",
-            "stm32f4xx_ll_usb.c",
-            "stm32f4xx_hal_tim.c",
-            "stm32f4xx_hal_tim_ex.c",
-            "stm32f4xx_hal_rcc.c",
-            "stm32f4xx_hal_rcc_ex.c",
+            "stm32f4xx_hal.c",
+            "stm32f4xx_hal_cortex.c",
+            "stm32f4xx_hal_dma.c",
+            "stm32f4xx_hal_dma_ex.c",
             "stm32f4xx_hal_flash.c",
             "stm32f4xx_hal_flash_ex.c",
             "stm32f4xx_hal_flash_ramfunc.c",
             "stm32f4xx_hal_gpio.c",
-            "stm32f4xx_hal_dma_ex.c",
-            "stm32f4xx_hal_dma.c",
+            "stm32f4xx_hal_pcd.c",
+            "stm32f4xx_hal_pcd_ex.c",
             "stm32f4xx_hal_pwr.c",
             "stm32f4xx_hal_pwr_ex.c",
-            "stm32f4xx_hal_cortex.c",
-            "stm32f4xx_hal.c",
+            "stm32f4xx_hal_rcc.c",
+            "stm32f4xx_hal_rcc_ex.c",
+            "stm32f4xx_hal_spi.c",
+            "stm32f4xx_hal_tim.c",
+            "stm32f4xx_hal_tim_ex.c",
+            "stm32f4xx_ll_usb.c",
         ]
     }
 
