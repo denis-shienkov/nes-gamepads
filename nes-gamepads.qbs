@@ -47,6 +47,7 @@ CppApplication {
     ]
 
     cpp.positionIndependentCode: false
+    cpp.cLanguageVersion: "c11"
 
     Properties {
         condition: qbs.debugInformation

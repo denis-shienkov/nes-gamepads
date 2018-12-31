@@ -55,10 +55,42 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "usbd_customhid.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
+#define GAMEPAD_FIRST_REPORT_INDEX      0
+#define GAMEPAD_SECOND_REPORT_INDEX     1
+#define GAMEPAD_FIRST_REPORT_ID         (GAMEPAD_FIRST_REPORT_INDEX + 1)
+#define GAMEPAD_SECOND_REPORT_ID        (GAMEPAD_SECOND_REPORT_INDEX + 1)
+#define GAMEPAD_COUNT                   2
+
+extern USBD_HandleTypeDef hUsbDeviceFS;
+
+#ifdef __GNUC__
+#pragma pack(1)
+#endif
+typedef struct
+{
+    const uint8_t ReportId;
+    uint8_t Button1    : 1;
+    uint8_t Button2    : 1;
+    uint8_t Button3    : 1;
+    uint8_t Button4    : 1;
+    uint8_t Button5    : 1;
+    uint8_t Button6    : 1;
+    uint8_t Button7    : 1;
+    uint8_t Button8    : 1;
+} GamePad_HidReportTypeDef;
+#ifdef __GNUC__
+#pragma pack()
+#endif
+
+_Static_assert(sizeof(GamePad_HidReportTypeDef) == USBD_CUSTOMHID_OUTREPORT_BUF_SIZE,
+               "Invalid size of GamePad_HidReportTypeDef");
 
 /* USER CODE END PTD */
 
@@ -75,6 +107,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+static GamePad_HidReportTypeDef GamepadReports[GAMEPAD_COUNT] = {
+    { GAMEPAD_FIRST_REPORT_ID, 0,0,0,0,0,0,0,0 }, /* First GamePad */
+    { GAMEPAD_SECOND_REPORT_ID, 0,0,0,0,0,0,0,0 } /* Second GamePad */
+};
 
 /* USER CODE END PV */
 
@@ -127,6 +164,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+      HAL_Delay(1000);
+
+      static int btn = 0;
+      btn = (btn > 0) ? 0 : 1;
+
+      GamePad_HidReportTypeDef *Report = &GamepadReports[GAMEPAD_FIRST_REPORT_INDEX];
+      Report->Button1 = btn;
+      USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, Report, USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
