@@ -68,6 +68,8 @@
 #define GAMEPAD_SECOND_REPORT_ID        (GAMEPAD_SECOND_REPORT_INDEX + 1)
 #define GAMEPAD_COUNT                   2
 
+#define GAMEPAD_SPI_READ_TIMEOUT        200 /* msecs */
+
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 #ifdef __GNUC__
@@ -76,14 +78,7 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 typedef struct
 {
     const uint8_t ReportId;
-    uint8_t Button1    : 1;
-    uint8_t Button2    : 1;
-    uint8_t Button3    : 1;
-    uint8_t Button4    : 1;
-    uint8_t Button5    : 1;
-    uint8_t Button6    : 1;
-    uint8_t Button7    : 1;
-    uint8_t Button8    : 1;
+    uint8_t ButtonsMask;
 } GamePad_HidReportTypeDef;
 #ifdef __GNUC__
 #pragma pack()
@@ -170,14 +165,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      HAL_Delay(1000);
+      HAL_Delay(100);
 
-      static int btn = 0;
-      btn = (btn > 0) ? 0 : 1;
-
-      GamePad_HidReportTypeDef *Report = &GamepadReports[GAMEPAD_FIRST_REPORT_INDEX];
-      Report->Button1 = btn;
-      USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, Report, USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
+      {
+          /* Read data from first gamepad */
+          uint8_t ButtonsMask = 0;
+          HAL_StatusTypeDef Status = HAL_SPI_Receive(&hspi1, &ButtonsMask, sizeof(ButtonsMask), GAMEPAD_SPI_READ_TIMEOUT);
+          if (Status == HAL_OK) {
+              GamePad_HidReportTypeDef *Report = &GamepadReports[GAMEPAD_FIRST_REPORT_INDEX];
+              Report->ButtonsMask = ButtonsMask;
+              Status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, Report, USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
+              if (Status == HAL_OK) {
+                  /* Do nothing */
+              } else {
+                  /* Turn on RED led */
+              }
+          } else {
+              /* Turn on BLUE led */
+          }
+      }
 
     /* USER CODE END WHILE */
 
