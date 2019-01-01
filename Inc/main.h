@@ -92,6 +92,12 @@ void Error_Handler(void);
 #define PH0_OSC_IN_GPIO_Port GPIOH
 #define PH1_OSC_OUT_Pin GPIO_PIN_1
 #define PH1_OSC_OUT_GPIO_Port GPIOH
+#define GAMEPAD_LATCH_1_Pin GPIO_PIN_4
+#define GAMEPAD_LATCH_1_GPIO_Port GPIOA
+#define GAMEPAD_SCK_1_Pin GPIO_PIN_5
+#define GAMEPAD_SCK_1_GPIO_Port GPIOA
+#define GAMEPAD_DATA_1_Pin GPIO_PIN_6
+#define GAMEPAD_DATA_1_GPIO_Port GPIOA
 #define OTG_FS_DM_Pin GPIO_PIN_11
 #define OTG_FS_DM_GPIO_Port GPIOA
 #define OTG_FS_DP_Pin GPIO_PIN_12

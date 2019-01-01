@@ -62,12 +62,14 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
-#define GAMEPAD_FIRST_REPORT_INDEX      0
-#define GAMEPAD_SECOND_REPORT_INDEX     1
-#define GAMEPAD_FIRST_REPORT_ID         (GAMEPAD_FIRST_REPORT_INDEX + 1)
-#define GAMEPAD_SECOND_REPORT_ID        (GAMEPAD_SECOND_REPORT_INDEX + 1)
-#define GAMEPAD_COUNT                   2
+typedef enum {
+    GAMEPAD_FIRST_INDEX,
+    GAMEPAD_SECOND_INDEX,
+    GAMEPAD_COUNT
+} GamePad_Index;
 
+#define GAMEPAD_FIRST_REPORT_ID         (GAMEPAD_FIRST_INDEX + 1)
+#define GAMEPAD_SECOND_REPORT_ID        (GAMEPAD_SECOND_INDEX + 1)
 #define GAMEPAD_SPI_READ_TIMEOUT        200 /* msecs */
 
 extern USBD_HandleTypeDef hUsbDeviceFS;
@@ -100,7 +102,6 @@ _Static_assert(sizeof(GamePad_HidReportTypeDef) == USBD_CUSTOMHID_OUTREPORT_BUF_
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 
 /* USER CODE BEGIN PV */
@@ -115,7 +116,6 @@ static GamePad_HidReportTypeDef GamepadReports[GAMEPAD_COUNT] = {
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -123,6 +123,35 @@ static void MX_SPI2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+static void Gamepad_SomeNopCounts(uint32_t Counts)
+{
+    for (volatile int Index = 0; Index < Counts; ++Index) {
+        __asm__("nop");
+    }
+}
+
+static uint8_t Gamepad_Read(int Index)
+{
+    /* Send latch pulse */
+    HAL_GPIO_WritePin(GPIOA, GAMEPAD_LATCH_1_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, GAMEPAD_LATCH_1_Pin, GPIO_PIN_RESET);
+
+    uint8_t ButtonsMask = 0;
+    for (uint8_t Bit = 0; Bit < 8; ++Bit) {
+        Gamepad_SomeNopCounts(5);
+        const GPIO_PinState State = HAL_GPIO_ReadPin(GPIOA, GAMEPAD_DATA_1_Pin);
+        /* Status GPIO_PIN_RESET means that a button is pressed. */
+        const uint8_t Value = (State == GPIO_PIN_RESET) ? 1 : 0;
+        ButtonsMask |= (Value << Bit);
+
+        /* Send clock pulse. */
+        HAL_GPIO_WritePin(GPIOA, GAMEPAD_SCK_1_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOA, GAMEPAD_SCK_1_Pin, GPIO_PIN_RESET);
+    }
+
+    return ButtonsMask;
+}
 
 /* USER CODE END 0 */
 
@@ -155,7 +184,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USB_DEVICE_Init();
-  MX_SPI1_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
@@ -165,23 +193,18 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      HAL_Delay(100);
+      HAL_Delay(10);
 
       {
           /* Read data from first gamepad */
-          uint8_t ButtonsMask = 0;
-          HAL_StatusTypeDef Status = HAL_SPI_Receive(&hspi1, &ButtonsMask, sizeof(ButtonsMask), GAMEPAD_SPI_READ_TIMEOUT);
+          const uint8_t ButtonsMask = Gamepad_Read(0);
+          GamePad_HidReportTypeDef *Report = &GamepadReports[GAMEPAD_FIRST_INDEX];
+          Report->ButtonsMask = ButtonsMask;
+          const USBD_StatusTypeDef Status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, Report, USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
           if (Status == HAL_OK) {
-              GamePad_HidReportTypeDef *Report = &GamepadReports[GAMEPAD_FIRST_REPORT_INDEX];
-              Report->ButtonsMask = ButtonsMask;
-              Status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, Report, USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
-              if (Status == HAL_OK) {
-                  /* Do nothing */
-              } else {
-                  /* Turn on RED led */
-              }
+              /* Do nothing */
           } else {
-              /* Turn on BLUE led */
+              /* Turn on RED led */
           }
       }
 
@@ -235,44 +258,6 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_SPI1_Init(void)
-{
-
-  /* USER CODE BEGIN SPI1_Init 0 */
-
-  /* USER CODE END SPI1_Init 0 */
-
-  /* USER CODE BEGIN SPI1_Init 1 */
-
-  /* USER CODE END SPI1_Init 1 */
-  /* SPI1 parameter configuration*/
-  hspi1.Instance = SPI1;
-  hspi1.Init.Mode = SPI_MODE_MASTER;
-  hspi1.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
-  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
-  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi1.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN SPI1_Init 2 */
-
-  /* USER CODE END SPI1_Init 2 */
-
-}
-
-/**
   * @brief SPI2 Initialization Function
   * @param None
   * @retval None
@@ -317,12 +302,29 @@ static void MX_SPI2_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GAMEPAD_LATCH_1_Pin|GAMEPAD_SCK_1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : GAMEPAD_LATCH_1_Pin GAMEPAD_SCK_1_Pin */
+  GPIO_InitStruct.Pin = GAMEPAD_LATCH_1_Pin|GAMEPAD_SCK_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : GAMEPAD_DATA_1_Pin */
+  GPIO_InitStruct.Pin = GAMEPAD_DATA_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GAMEPAD_DATA_1_GPIO_Port, &GPIO_InitStruct);
 
 }
 
