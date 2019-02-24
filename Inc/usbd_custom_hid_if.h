@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file           : usbd_custom_hid_if.h
-  * @version        : v1.0_Cube
+  * @version        : v2.0_Cube
   * @brief          : Header for usbd_custom_hid_if.c file.
   ******************************************************************************
   * This notice applies to any and all portions of this file

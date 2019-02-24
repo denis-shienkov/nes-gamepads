@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file           : usbd_custom_hid_if.c
-  * @version        : v1.0_Cube
+  * @version        : v2.0_Cube
   * @brief          : USB Device Custom HID interface file.
   ******************************************************************************
   * This notice applies to any and all portions of this file
@@ -233,6 +233,8 @@ static int8_t CUSTOM_HID_DeInit_FS(void)
 static int8_t CUSTOM_HID_OutEvent_FS(uint8_t event_idx, uint8_t state)
 {
   /* USER CODE BEGIN 6 */
+    (void)event_idx;
+    (void)state;
   return (USBD_OK);
   /* USER CODE END 6 */
 }

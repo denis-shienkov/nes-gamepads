@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
+  * File Name          : stm32f1xx_hal_msp.c
+  * Description        : This file provides code for the MSP Initialization 
+  *                      and de-Initialization codes.
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -39,61 +39,70 @@
   */
 /* USER CODE END Header */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx_hal.h"
-
-/* Private includes ----------------------------------------------------------*/
+#include "main.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN TD */
 
-/* USER CODE END ET */
+/* USER CODE END TD */
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN Define */
+ 
+/* USER CODE END Define */
 
-/* USER CODE END EC */
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN Macro */
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
+/* USER CODE END Macro */
 
-/* USER CODE END EM */
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE BEGIN PV */
 
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+/* USER CODE END PV */
 
-/* USER CODE BEGIN EFP */
+/* Private function prototypes -----------------------------------------------*/
+/* USER CODE BEGIN PFP */
 
-/* USER CODE END EFP */
+/* USER CODE END PFP */
 
-/* Private defines -----------------------------------------------------------*/
-#define GAMEPAD_LATCH_Pin GPIO_PIN_0
-#define GAMEPAD_LATCH_GPIO_Port GPIOB
-#define GAMEPAD_DATA_2_Pin GPIO_PIN_1
-#define GAMEPAD_DATA_2_GPIO_Port GPIOB
-#define GAMEPAD_DATA_1_Pin GPIO_PIN_10
-#define GAMEPAD_DATA_1_GPIO_Port GPIOB
-#define GAMEPAD_CLK_Pin GPIO_PIN_11
-#define GAMEPAD_CLK_GPIO_Port GPIOB
-/* USER CODE BEGIN Private defines */
+/* External functions --------------------------------------------------------*/
+/* USER CODE BEGIN ExternalFunctions */
 
-/* USER CODE END Private defines */
+/* USER CODE END ExternalFunctions */
 
-#ifdef __cplusplus
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+/**
+  * Initializes the Global MSP.
+  */
+void HAL_MspInit(void)
+{
+  /* USER CODE BEGIN MspInit 0 */
+
+  /* USER CODE END MspInit 0 */
+
+  __HAL_RCC_AFIO_CLK_ENABLE();
+  __HAL_RCC_PWR_CLK_ENABLE();
+
+  /* System interrupt init*/
+
+  /**NOJTAG: JTAG-DP Disabled and SW-DP Enabled 
+  */
+  __HAL_AFIO_REMAP_SWJ_NOJTAG();
+
+  /* USER CODE BEGIN MspInit 1 */
+
+  /* USER CODE END MspInit 1 */
 }
-#endif
 
-#endif /* __MAIN_H */
+/* USER CODE BEGIN 1 */
+
+/* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

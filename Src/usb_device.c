@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file           : usb_device.c
-  * @version        : v1.0_Cube
+  * @version        : v2.0_Cube
   * @brief          : This file implements the USB Device
   ******************************************************************************
   * This notice applies to any and all portions of this file
