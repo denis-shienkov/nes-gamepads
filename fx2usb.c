@@ -101,7 +101,7 @@ void usb_init(void)
 void usb_task(void)
 {
     if (g_gotsud) { // Wait for sudav.
-        hid_ep0setup_proc();
+        hid_ep0_proc();
         g_gotsud = FALSE;
     }
 
