@@ -1,8 +1,9 @@
-// Allocate all registers once here.
-#define ALLOCATE_EXTERN
+// Allocate all registers once here (only for C51 compiler).
+#define DEFINE_REGS
 #include "fx2regs.h"
 
 #include "fx2hw.h"
+#include "fx2irqs.h"
 #include "fx2usb.h"
 
 static void loop_exec(void)
@@ -18,4 +19,9 @@ int main(void)
     usb_init();
     loop_exec();
     return 0;
+}
+
+void usb_resume_isr(void) INTERRUPT__ WKUP_IRQ
+{
+    usb_rsmirq_clear();
 }

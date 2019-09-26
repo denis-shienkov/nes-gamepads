@@ -24,34 +24,66 @@ enum boolean {
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
 typedef unsigned long DWORD;
-typedef bit BOOL;
+typedef unsigned char BOOL;
 
 #ifndef NULL
 #define NULL (void *)0
 #endif
 
-#ifdef ALLOCATE_EXTERN
-#define EXTERN__
-#define AT__ _at_
-#else
-#define EXTERN__ extern
-#define AT__ ;/ ## /
-#endif
-
 #if defined(__ICC8051__)
+
 // TODO:
+
 #elif defined (__C51__)
-#include "intrins.h"
-# define xdata_reg(reg_name, reg_addr) \
-    EXTERN__ xdata volatile BYTE reg_name AT__ reg_addr;
+
+# include "intrins.h"
+
+# define NOP__() _nop_()
+# define INTERRUPT__ interrupt
+
+# define XDATA__ xdata
+# define CODE__ code
+# define AT__ _at_
+
+# define SFR__ sfr
+# define SBIT__ sbit
+
+# if defined(DEFINE_REGS)
+#  define xdata_reg(reg_name, reg_addr) \
+    XDATA__ volatile BYTE reg_name AT__ reg_addr;
+# else
+#  define xdata_reg(reg_name, reg_addr) \
+    extern XDATA__ volatile BYTE reg_name;
+# endif
+
 # define special_function_reg(reg_name, reg_addr) \
-    sfr reg_name = reg_addr;
+    SFR__ reg_name = reg_addr;
 # define special_function_reg_bit(bit_name, reg_addr, bit_num) \
     sbit bit_name = reg_addr + bit_num;
+
 #elif defined (__SDCC_mcs51)
-// TODO:
+
+# define NOP__() __asm nop __endasm
+# define INTERRUPT__ __interrupt
+
+# define XDATA__ __xdata
+# define CODE__ __code
+# define AT__ __at
+
+# define SFR__ __sfr
+# define SBIT__ __sbit
+
+# define xdata_reg(reg_name, reg_addr) \
+    XDATA__ AT__ reg_addr volatile BYTE reg_name;
+# define special_function_reg(reg_name, reg_addr) \
+    SFR__ AT__ reg_addr reg_name;
+# define special_function_reg_bit(bit_name, reg_addr, bit_num) \
+    SBIT__ AT__ reg_addr + bit_num bit_name;
+
 #else
+
 #error "Unsupported toolchain"
+
 #endif
 
 #ifdef __cplusplus

@@ -24,6 +24,28 @@ CppApplication {
         ]
     }
 
+    Group {
+        name: "Keil Autovec"
+        condition: qbs.toolchain.contains("keil")
+        fileTags: ["asm"]
+        files: [
+            "fx2autovec_keil.a51",
+        ]
+    }
+
+    //
+    // SDCC-specific properties and sources.
+    //
+
+    Group {
+        name: "Sdcc Autovec"
+        condition: qbs.toolchain.contains("sdcc")
+        fileTags: ["asm"]
+        files: [
+            "fx2autovec_sdcc.a51",
+        ]
+    }
+
     //
     // Common code.
     //
@@ -40,7 +62,6 @@ CppApplication {
             "fx2hw.c",
             "fx2hw.h",
             "fx2irqs.h",
-            "fx2jmptable.a51",
             "fx2regs.h",
             "fx2usb.c",
             "fx2usb.h",

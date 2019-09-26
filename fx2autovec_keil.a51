@@ -3,13 +3,9 @@ $NOMOD51
 name    fx2jmptable
 
 extrn code(usb_sudav_isr, usb_sutok_isr, usb_sof_isr, usb_ures_isr, usb_susp_isr, usb_hispeed_isr)
-extrn code(usb_resume_isr, usb_stub_isr)
+extrn code(usb_stub_isr)
 
 public  usb_int2_autovector, gpif_int4_autovector, jmp_table
-
-;; Resume interrupt vector (WAKEUP / WU2 pin or USB resume)
-    CSEG    AT  33H
-    ljmp    usb_resume_isr
 
 ;; USB interrupt vector (USBINT).
     CSEG    AT  43H
@@ -21,10 +17,10 @@ usb_int2_autovector  equ $ + 2
 gpif_int4_autovector  equ $ + 2
     ljmp    jmp_table ; Autovector will replace byte 55.
 
-;; USB jump table.
+;; USB && FIFO/GPIF jump table.
 
 ?pr?jmp_table?jmptable    segment code  page
-    rseg    ?pr?jmp_table?jmptable ; Place jump table on a page boundaryautovector jump table.
+    rseg    ?pr?jmp_table?jmptable ; Place jump table on a page boundary autovector jump table.
 
 jmp_table:
 

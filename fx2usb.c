@@ -1,23 +1,8 @@
-#pragma NOIV // Do not generate interrupt vectors.
+#pragma noiv // Do not generate interrupt vectors.
 
 #include "fx2hid.h"
 #include "fx2hw.h"
-#include "fx2irqs.h"
 #include "fx2usb.h"
-
-// USB irq control macros.
-#define usb_irq_enable() (EUSB = 1)
-#define usb_irq_disable() (EUSB = 0)
-#define usb_irq_clear() (EXIF &= ~MSK_EXIF_USBNT)
-
-// USB power control macros.
-#define usb_rsmirq_enable() (EICON |= MSK_EICON_ERESI)
-#define usb_rsmirq_disable() (EICON &= ~MSK_EICON_ERESI)
-#define usb_rsmirq_clear() (EICON &= ~MSK_EICON_RESI)
-
-#define usb_is_ext_wakeup() \
-    (((WAKEUPCS & MSK_WAKEUPCS_WU2) && (WAKEUPCS & MSK_WAKEUPCS_WU2EN)) \
-    || ((WAKEUPCS & MSK_WAKEUPCS_WU) && (WAKEUPCS & MSK_WAKEUPCS_WUEN)))
 
 static volatile BOOL g_gotsud = FALSE;
 static volatile BOOL g_sleep = FALSE;
@@ -148,49 +133,44 @@ BOOL usb_is_hispeed_supported(void)
 
 // USB autovector interrupts.
 
-void usb_resume_isr(void) interrupt WKUP_IRQ
-{
-    usb_rsmirq_clear();
-}
-
-void usb_sudav_isr(void) interrupt 0
+void usb_sudav_isr(void) INTERRUPT__ 0
 {
     g_gotsud = TRUE;
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SUDAV;
 }
 
-void usb_sof_isr(void) interrupt 0
+void usb_sof_isr(void) INTERRUPT__ 0
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SOF;
 }
 
-void usb_sutok_isr(void) interrupt 0
+void usb_sutok_isr(void) INTERRUPT__ 0
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SUTOK;
 }
 
-void usb_susp_isr(void) interrupt 0
+void usb_susp_isr(void) INTERRUPT__ 0
 {
     g_sleep = TRUE;
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SUSP;
 }
 
-void usb_ures_isr(void) interrupt 0
+void usb_ures_isr(void) INTERRUPT__ 0
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_URES;
 }
 
-void usb_hispeed_isr(void) interrupt 0
+void usb_hispeed_isr(void) INTERRUPT__ 0
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_HSGRANT;
 }
 
-void usb_stub_isr(void) interrupt 0
+void usb_stub_isr(void) INTERRUPT__ 0
 {
 }

@@ -4,7 +4,7 @@
 
 static void ep0_get_dscr_proc(void)
 {
-    const BYTE xdata *dscr_ptr = hid_descriptor_ptr_get();
+    XDATA__ const BYTE *dscr_ptr = (XDATA__ BYTE *)hid_descriptor_ptr_get();
     if (dscr_ptr) {
         SUDPTRH = usb_word_msb_get(dscr_ptr);
         SUDPTRL = usb_word_lsb_get(dscr_ptr);

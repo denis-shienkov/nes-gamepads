@@ -21,7 +21,7 @@ enum usb_descriptor_string_index {
     USB_DSCR_SERIAL_STRING_INDEX
 };
 
-static const BYTE code g_device_dscr[] = {
+static const BYTE CODE__ g_device_dscr[] = {
     0x12, // Descriptor length.
     USB_DSCR_TYPE_DEVICE, // Decriptor type.
     usb_word_lsb_get(USB_SPEC_BCD_VERSION), // USB BCD version, lo.
@@ -42,7 +42,7 @@ static const BYTE code g_device_dscr[] = {
     0x01 // Configurations number.
 };
 
-static const BYTE code g_device_qual_dscr[] = {
+static const BYTE CODE__ g_device_qual_dscr[] = {
     0x0A, // Descriptor length.
     USB_DSCR_TYPE_DEVQUAL, // Decriptor type.
     usb_word_lsb_get(USB_SPEC_BCD_VERSION), // USB BCD version, lo.
@@ -55,36 +55,36 @@ static const BYTE code g_device_qual_dscr[] = {
     0x00 // Reserved
 };
 
-static const BYTE code g_config_dscr[] = {
+static const BYTE CODE__ g_config_dscr[] = {
     0
 };
 
-static const BYTE code g_other_config_dscr[] = {
+static const BYTE CODE__ g_other_config_dscr[] = {
     0
 };
 
-static const BYTE code g_lang_id_dscr[] = {
+static const BYTE CODE__ g_lang_id_dscr[] = {
     0x04, // Descriptor length.
     USB_DSCR_TYPE_STRING, // Decriptor type.
     usb_word_lsb_get(USB_LANG_ID), // Language id, lo.
     usb_word_msb_get(USB_LANG_ID) // Language id, hi.
 };
 
-static const BYTE code g_manuf_str_dscr[] = {
+static const BYTE CODE__ g_manuf_str_dscr[] = {
     0x0E, // Descriptor length.
     USB_DSCR_TYPE_STRING, // Decriptor type.
     'Q', 'B', 'S', ' ', 'e', 'x', 'a', 'm', 'p', 'l', 'e',
     0x00
 };
 
-static const BYTE code g_product_str_dscr[] = {
+static const BYTE CODE__ g_product_str_dscr[] = {
     0x0F, // Descriptor length.
     USB_DSCR_TYPE_STRING, // Decriptor type.
     'N', 'E', 'S', ' ', 'G', 'a', 'm', 'e', 'P', 'a', 'd', 's',
     0x00
 };
 
-static const BYTE code g_serialno_str_dscr[] = {
+static const BYTE CODE__ g_serialno_str_dscr[] = {
     0x0F, // Descriptor length.
     USB_DSCR_TYPE_STRING, // Decriptor type.
     '0' ,'1', '0', '2' , '0', '3', '0', '4', '0', '5', '0', '6',

@@ -115,6 +115,20 @@ enum ep_buf {
     EP_BUF_TRIPLE = 3
 };
 
+// USB irq control macros.
+#define usb_irq_enable() (EUSB = 1)
+#define usb_irq_disable() (EUSB = 0)
+#define usb_irq_clear() (EXIF &= ~MSK_EXIF_USBNT)
+
+// USB power control macros.
+#define usb_rsmirq_enable() (EICON |= MSK_EICON_ERESI)
+#define usb_rsmirq_disable() (EICON &= ~MSK_EICON_ERESI)
+#define usb_rsmirq_clear() (EICON &= ~MSK_EICON_RESI)
+
+#define usb_is_ext_wakeup() \
+    (((WAKEUPCS & MSK_WAKEUPCS_WU2) && (WAKEUPCS & MSK_WAKEUPCS_WU2EN)) \
+    || ((WAKEUPCS & MSK_WAKEUPCS_WU) && (WAKEUPCS & MSK_WAKEUPCS_WUEN)))
+
 #define usb_ep0_stall() \
     EP0CS |= MSK_EP01CS_EPSTALL
 
