@@ -37,6 +37,14 @@ CppApplication {
     // SDCC-specific properties and sources.
     //
 
+    Properties {
+        condition: qbs.toolchain.contains("sdcc")
+        cpp.driverLinkerFlags: [
+            "--code-loc", "0x0100",
+            "--xram-loc", "0x1000"
+        ]
+    }
+
     Group {
         name: "Sdcc Autovec"
         condition: qbs.toolchain.contains("sdcc")
