@@ -29,7 +29,7 @@ CppApplication {
         condition: qbs.toolchain.contains("keil")
         fileTags: ["asm"]
         files: [
-            "fx2autovec_keil.a51",
+            "autovec_keil.a51",
         ]
     }
 
@@ -50,7 +50,7 @@ CppApplication {
         condition: qbs.toolchain.contains("sdcc")
         fileTags: ["asm"]
         files: [
-            "fx2autovec_sdcc.a51",
+            "autovec_sdcc.a51",
         ]
     }
 
@@ -58,25 +58,19 @@ CppApplication {
     // Common code.
     //
 
-    Group {
-        name: "Fx2"
-        files: [
-            "fx2defs.h",
-            "fx2hid.c",
-            "fx2hid.h",
-            "fx2hiddscr.c",
-            "fx2hidep0.c",
-            "fx2hidstream.c",
-            "fx2hw.c",
-            "fx2hw.h",
-            "fx2irqs.h",
-            "fx2regs.h",
-            "fx2usb.c",
-            "fx2usb.h",
-        ]
-    }
-
     files: [
+        "core.c",
+        "core.h",
+        "defs.h",
+        "hid.c",
+        "hid.h",
+        "hiddscr.c",
+        "hidep0.c",
+        "hidstream.c",
+        "irqs.h",
         "main.c",
+        "regs.h",
+        "usb.c",
+        "usb.h",
     ]
 }

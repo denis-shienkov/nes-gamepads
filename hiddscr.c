@@ -1,4 +1,4 @@
-#include "fx2usb.h"
+#include "usb.h"
 
 enum usb_bcd_version {
     USB_SPEC_BCD_VERSION = 0x0200,

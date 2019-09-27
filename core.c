@@ -1,5 +1,5 @@
-#include "fx2hw.h"
-#include "fx2regs.h"
+#include "core.h"
+#include "regs.h"
 
 enum cpu_freq_clk {
     CPU_CLK_12M = 0,
@@ -13,7 +13,7 @@ enum cpu_freq_clk {
 #define cpu_freq_clk_set(freq_clk) \
     CPUCS = (CPUCS & ~MSK_CPUCS_CLKSPD) | (freq_clk << 3)
 
-void hw_init(void)
+void core_init(void)
 {
     // Set the CPU clock to 48MHz.
     cpu_freq_clk_set(CPU_CLK_48M);
@@ -23,7 +23,7 @@ void hw_init(void)
     sync_delay();
 }
 
-void hw_delay(WORD msecs)
+void core_delay(WORD msecs)
 {
     const WORD clk = cpu_freq_clk_get();
     const WORD loop_count = (clk == CPU_CLK_12M)

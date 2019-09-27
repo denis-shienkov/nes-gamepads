@@ -1,7 +1,7 @@
 #ifndef FX2_HID_H
 #define FX2_HID_H
 
-#include "fx2defs.h"
+#include "defs.h"
 
 #ifdef __cplusplus
 extern "C" {

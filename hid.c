@@ -1,6 +1,6 @@
-#include "fx2hid.h"
-#include "fx2hw.h"
-#include "fx2usb.h"
+#include "hid.h"
+#include "core.h"
+#include "usb.h"
 
 void hid_init(void)
 {

@@ -1,10 +1,10 @@
 // Allocate all registers once here (only for C51 compiler).
 #define DEFINE_REGS
-#include "fx2regs.h"
+#include "regs.h"
 
-#include "fx2hw.h"
-#include "fx2irqs.h"
-#include "fx2usb.h"
+#include "core.h"
+#include "irqs.h"
+#include "usb.h"
 
 static void loop_exec(void)
 {
@@ -15,7 +15,7 @@ static void loop_exec(void)
 
 int main(void)
 {
-    hw_init();
+    core_init();
     usb_init();
     loop_exec();
     return 0;

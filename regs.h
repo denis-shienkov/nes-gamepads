@@ -1,7 +1,7 @@
 #ifndef FX2_REGS_H
 #define FX2_REGS_H
 
-#include "fx2defs.h"
+#include "defs.h"
 
 #ifdef __cplusplus
 extern "C" {

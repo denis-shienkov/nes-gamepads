@@ -1,8 +1,8 @@
 #pragma noiv // Do not generate interrupt vectors.
 
-#include "fx2hid.h"
-#include "fx2hw.h"
-#include "fx2usb.h"
+#include "hid.h"
+#include "core.h"
+#include "usb.h"
 
 static volatile BOOL g_gotsud = FALSE;
 static volatile BOOL g_sleep = FALSE;
@@ -21,7 +21,7 @@ static void usb_disconnect(BOOL renumerate)
         USBCS |= MSK_USBCS_DISCON;
     }
 
-    hw_delay(1500);
+    core_delay(1500);
 
     // Clear any pending USB interrupt requests.
     // They're for our old life.
@@ -37,7 +37,7 @@ static void usb_resume(void)
 {
     if (usb_is_ext_wakeup()) {
         USBCS |= MSK_USBCS_SIGRESUME;
-        hw_delay(20);
+        core_delay(20);
         USBCS &= ~MSK_USBCS_SIGRESUME;
     }
 }

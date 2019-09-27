@@ -1,7 +1,7 @@
 #ifndef FX2_HW_H
 #define FX2_HW_H
 
-#include "fx2defs.h"
+#include "defs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -236,8 +236,8 @@ extern "C" {
     NOP__(); }
 #endif
 
-void hw_init(void);
-void hw_delay(WORD msec);
+void core_init(void);
+void core_delay(WORD msec);
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,7 @@
 #ifndef FX2_USB_H
 #define FX2_USB_H
 
-#include "fx2regs.h"
+#include "regs.h"
 
 #ifdef __cplusplus
 extern "C" {
