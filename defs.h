@@ -32,53 +32,83 @@ typedef unsigned char BOOL;
 
 #if defined(__ICC8051__)
 
-// TODO:
+#include <intrinsics.h>
+
+# define NOP() __no_operation()
+
+# define XDATA __xdata
+# define CODE __code
+# define AT __at
+
+# define SFR __sfr
+# define SBIT __bit
+
+# define XDATA_REG(reg_name, reg_addr) \
+    XDATA __no_init volatile BYTE reg_name @ reg_addr;
+
+# define SPEC_FUN_REG(reg_name, reg_addr) \
+    SFR __no_init volatile BYTE reg_name @ reg_addr;
+
+# define SPEC_FUN_REG_BIT(bit_name, reg_addr, bit_num) \
+    SBIT __no_init volatile _Bool bit_name @ (reg_addr+bit_num);
+
+# define _PPTOSTR_(x) #x
+# define _PPARAM_(address) _PPTOSTR_(vector=address * 8 + 3)
+# define INTERRUPT(isr_name, vector) \
+    _Pragma(_PPARAM_(vector)) __interrupt void isr_name(void)
 
 #elif defined (__C51__)
 
-# include "intrins.h"
+# include <intrins.h>
 
-# define NOP__() _nop_()
-# define INTERRUPT__ interrupt
+# define NOP() _nop_()
 
-# define XDATA__ xdata
-# define CODE__ code
-# define AT__ _at_
+# define XDATA xdata
+# define CODE code
+# define AT _at_
 
-# define SFR__ sfr
-# define SBIT__ sbit
+# define SFR sfr
+# define SBIT sbit
 
 # if defined(DEFINE_REGS)
-#  define xdata_reg(reg_name, reg_addr) \
-    XDATA__ volatile BYTE reg_name AT__ reg_addr;
+#  define XDATA_REG(reg_name, reg_addr) \
+    XDATA volatile BYTE reg_name AT reg_addr;
 # else
-#  define xdata_reg(reg_name, reg_addr) \
-    extern XDATA__ volatile BYTE reg_name;
+#  define XDATA_REG(reg_name, reg_addr) \
+    extern XDATA volatile BYTE reg_name;
 # endif
 
-# define special_function_reg(reg_name, reg_addr) \
-    SFR__ reg_name = reg_addr;
-# define special_function_reg_bit(bit_name, reg_addr, bit_num) \
+# define SPEC_FUN_REG(reg_name, reg_addr) \
+    SFR reg_name = reg_addr;
+
+# define SPEC_FUN_REG_BIT(bit_name, reg_addr, bit_num) \
     sbit bit_name = reg_addr + bit_num;
+
+# define INTERRUPT(isr_name, num) \
+    void isr_name (void) interrupt num
 
 #elif defined (__SDCC_mcs51)
 
-# define NOP__() __asm nop __endasm
-# define INTERRUPT__ __interrupt
+# define NOP() __asm nop __endasm
 
-# define XDATA__ __xdata
-# define CODE__ __code
-# define AT__ __at
+# define XDATA __xdata
+# define CODE __code
+# define AT __at
 
-# define SFR__ __sfr
-# define SBIT__ __sbit
+# define SFR __sfr
+# define SBIT __sbit
 
-# define xdata_reg(reg_name, reg_addr) \
-    XDATA__ AT__ reg_addr volatile BYTE reg_name;
-# define special_function_reg(reg_name, reg_addr) \
-    SFR__ AT__ reg_addr reg_name;
-# define special_function_reg_bit(bit_name, reg_addr, bit_num) \
-    SBIT__ AT__ reg_addr + bit_num bit_name;
+# define XDATA_REG(reg_name, reg_addr) \
+    XDATA AT reg_addr volatile BYTE reg_name;
+
+# define SPEC_FUN_REG(reg_name, reg_addr) \
+    SFR AT reg_addr reg_name;
+
+# define SPEC_FUN_REG_BIT(bit_name, reg_addr, bit_num) \
+    SBIT AT reg_addr + bit_num bit_name;
+
+# define INTERRUPT(isr_name, num) \
+    void isr_name (void) interrupt (num)
 
 #else
 

@@ -21,7 +21,7 @@ int main(void)
     return 0;
 }
 
-void usb_resume_isr(void) INTERRUPT__ WKUP_IRQ
+INTERRUPT(usb_resume_isr, WKUP_IRQ)
 {
     usb_rsmirq_clear();
 }

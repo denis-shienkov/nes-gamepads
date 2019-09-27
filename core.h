@@ -38,202 +38,202 @@ extern "C" {
 
 #if (CORE_SCYCL == 1)
 #  define sync_delay() {\
-    NOP__(); }
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 2)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 3)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 4)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 5)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 6)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 7)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 8)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 9)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 10)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 11)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 12)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 13)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 14)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 15)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 #if (CORE_SCYCL == 16)
 #  define sync_delay() {\
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); \
-    NOP__(); }
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); \
+    NOP(); }
 #endif
 
 void core_init(void);

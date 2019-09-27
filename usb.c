@@ -1,7 +1,5 @@
-#pragma noiv // Do not generate interrupt vectors.
-
-#include "hid.h"
 #include "core.h"
+#include "hid.h"
 #include "usb.h"
 
 static volatile BOOL g_gotsud = FALSE;
@@ -133,44 +131,44 @@ BOOL usb_is_hispeed_supported(void)
 
 // USB autovector interrupts.
 
-void usb_sudav_isr(void) INTERRUPT__ 0
+void usb_sudav_isr(void)
 {
     g_gotsud = TRUE;
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SUDAV;
 }
 
-void usb_sof_isr(void) INTERRUPT__ 0
+void usb_sof_isr(void)
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SOF;
 }
 
-void usb_sutok_isr(void) INTERRUPT__ 0
+void usb_sutok_isr(void)
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SUTOK;
 }
 
-void usb_susp_isr(void) INTERRUPT__ 0
+void usb_susp_isr(void)
 {
     g_sleep = TRUE;
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_SUSP;
 }
 
-void usb_ures_isr(void) INTERRUPT__ 0
+void usb_ures_isr(void)
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_URES;
 }
 
-void usb_hispeed_isr(void) INTERRUPT__ 0
+void usb_hispeed_isr(void)
 {
     usb_irq_clear();
     USBIRQ = MSK_USBIEIRQ_HSGRANT;
 }
 
-void usb_stub_isr(void) INTERRUPT__ 0
+void usb_stub_isr(void)
 {
 }
