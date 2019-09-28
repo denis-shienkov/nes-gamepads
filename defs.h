@@ -108,7 +108,7 @@ typedef unsigned char BOOL;
     SBIT AT reg_addr + bit_num bit_name;
 
 # define INTERRUPT(isr_name, num) \
-    void isr_name (void) interrupt (num)
+    void isr_name (void) __interrupt num
 
 #else
 
