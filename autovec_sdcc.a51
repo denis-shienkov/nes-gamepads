@@ -1,8 +1,5 @@
 .module fx2jmptable
 
-.globl  _usb_int2_autovector
-.globl  _gpif_int4_autovector
-.globl  _jmp_table
 .globl  _usb_sudav_isr
 .globl  _usb_sutok_isr
 .globl  _usb_sof_isr
@@ -12,20 +9,18 @@
 .globl  _usb_stub_isr
 
 ;; USB interrupt vector (USBINT).
-.area   INT2AV (ABS,OVR)
+.area   int2av (abs,ovr)
 .org    0x43
-_usb_int2_autovector = #. + 2
     ljmp _jmp_table ; Autovector will replace byte 45.
 
 ;; GPIG/FIFOs/INT4 pin interrupt vector (IE4).
-.area   INT4AV (ABS,OVR)
+.area   int4av (abs,ovr)
 .org    0x53
-_gpif_int4_autovector = #. + 2
     ljmp _jmp_table ; Autovector will replace byte 55.
 
 ;; USB && FIFO/GPIF jump table.
 
-.area _jmp_table (CODE)
+.area _jmp_table (code)
 
 _jmp_table:
 
