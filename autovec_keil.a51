@@ -1,20 +1,16 @@
-$NOMOD51
+$nomod51
 
 name    fx2jmptable
 
 extrn code(usb_sudav_isr, usb_sutok_isr, usb_sof_isr, usb_ures_isr, usb_susp_isr, usb_hispeed_isr)
 extrn code(usb_stub_isr)
 
-public  usb_int2_autovector, gpif_int4_autovector, jmp_table
-
 ;; USB interrupt vector (USBINT).
-    CSEG    AT  43H
-usb_int2_autovector  equ $ + 2
+    cseg    at  43H
     ljmp    jmp_table ; Autovector will replace byte 45.
 
 ;; GPIG/FIFOs/INT4 pin interrupt vector (IE4).
-    CSEG    AT  53H
-gpif_int4_autovector  equ $ + 2
+    cseg    at  53H
     ljmp    jmp_table ; Autovector will replace byte 55.
 
 ;; USB && FIFO/GPIF jump table.
