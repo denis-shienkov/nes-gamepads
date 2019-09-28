@@ -39,6 +39,15 @@ CppApplication {
         files: ["lnk51ew_CY7C68013A.xcl"]
     }
 
+    Group {
+        name: "Iar Autovec"
+        condition: qbs.toolchain.contains("iar")
+        fileTags: ["asm"]
+        files: [
+            "autovec_iar.s51",
+        ]
+    }
+
     //
     // KEIL-specific properties and sources.
     //
