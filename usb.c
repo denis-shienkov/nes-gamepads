@@ -13,10 +13,10 @@ static void usb_disconnect(BOOL renumerate)
     if (renumerate) {
         // If renumerate (i.e. 8051 will handle SETUP commands)
         // disconnect from USB and set the renumerate bit.
-        USBCS |= (MSK_USBCS_DISCON | MSK_USBCS_RENUM);
+        USBCS |= (bmDISCON | bmRENUM);
     } else {
         // Just disconnect from USB.
-        USBCS |= MSK_USBCS_DISCON;
+        USBCS |= bmDISCON;
     }
 
     core_delay(1500);
@@ -28,26 +28,26 @@ static void usb_disconnect(BOOL renumerate)
 
     usb_irq_clear();
 
-    USBCS &= ~MSK_USBCS_DISCON; // Reconnect USB.
+    USBCS &= ~bmDISCON; // Reconnect USB.
 }
 
 static void usb_resume(void)
 {
     if (usb_is_ext_wakeup()) {
-        USBCS |= MSK_USBCS_SIGRESUME;
+        USBCS |= bmSIGRESUME;
         core_delay(20);
-        USBCS &= ~MSK_USBCS_SIGRESUME;
+        USBCS &= ~bmSIGRESUME;
     }
 }
 
 static void usb_suspend(void)
 {
     // Clear the wake source bits.
-    WAKEUPCS = (WAKEUPCS | MSK_WAKEUPCS_WU | MSK_WAKEUPCS_WU2);
+    WAKEUPCS = (WAKEUPCS | bmWU | bmWU2);
     // Write any value.
     SUSPEND = 0xAA;
     // Switch CPU to idle.
-    PCON = MSK_PCON_IDLE;
+    PCON = bmIDLE;
     sync_delay();
     sync_delay();
 }
@@ -60,25 +60,25 @@ void usb_init(void)
     usb_rsmirq_enable(); // Enable USB wake-up interrupt.
 
     // Enable int 2 & 4 autovectoring.
-    INTSETUP |= (MSK_INTSETUP_AV2EN | MSK_INTSETUP_AV4EN);
+    INTSETUP |= (bmAV2EN | bmAV4EN);
     // Enable selected USB interrupts.
-    USBIE |= (MSK_USBIEIRQ_SUDAV | MSK_USBIEIRQ_SOF | MSK_USBIEIRQ_SUTOK
-              | MSK_USBIEIRQ_SUSP | MSK_USBIEIRQ_URES | MSK_USBIEIRQ_HSGRANT);
+    USBIE |= (bmSUDAV | bmSOF | bmSUTOK
+              | bmSUSP | bmURES | bmHSGRANT);
 
     EA = 1; // Enable 8051 interrupts.
     PUSB = 1; // Set USB interrupt to high priority.
 
     // Renumerate if necessary.
-    if (!(MSK_USBCS_RENUM & USBCS)) {
+    if (!(bmRENUM & USBCS)) {
         usb_disconnect(TRUE);
     }
 
     // Unconditionally re-connect. If we loaded from eeprom we are
     // disconnected and need to connect. If we just renumerated this
     // is not necessary but doesn't hurt anything.
-    USBCS &= ~MSK_USBCS_DISCON;
+    USBCS &= ~bmDISCON;
     // Set stretch to 0 (after renumeration).
-    CKCON = ((CKCON & (~MSK_CKCON_STRETCH)) | MSK_CKCON_FW_STRETCH_VALUE);
+    CKCON = ((CKCON & (~bmSTRETCH)) | bmFW_STRETCH_VALUE);
 }
 
 void usb_task(void)
@@ -124,7 +124,7 @@ BOOL usb_self_pwr_get(void)
 
 BOOL usb_is_hispeed_supported(void)
 {
-   if (GPCR2 & MSK_GPCR2_FULLSPEEDONLY)
+   if (GPCR2 & bmFULLSPEEDONLY)
       return FALSE;
    return TRUE;
 }
@@ -135,38 +135,38 @@ void usb_sudav_isr(void)
 {
     g_gotsud = TRUE;
     usb_irq_clear();
-    USBIRQ = MSK_USBIEIRQ_SUDAV;
+    USBIRQ = bmSUDAV;
 }
 
 void usb_sof_isr(void)
 {
     usb_irq_clear();
-    USBIRQ = MSK_USBIEIRQ_SOF;
+    USBIRQ = bmSOF;
 }
 
 void usb_sutok_isr(void)
 {
     usb_irq_clear();
-    USBIRQ = MSK_USBIEIRQ_SUTOK;
+    USBIRQ = bmSUTOK;
 }
 
 void usb_susp_isr(void)
 {
     g_sleep = TRUE;
     usb_irq_clear();
-    USBIRQ = MSK_USBIEIRQ_SUSP;
+    USBIRQ = bmSUSP;
 }
 
 void usb_ures_isr(void)
 {
     usb_irq_clear();
-    USBIRQ = MSK_USBIEIRQ_URES;
+    USBIRQ = bmURES;
 }
 
 void usb_hispeed_isr(void)
 {
     usb_irq_clear();
-    USBIRQ = MSK_USBIEIRQ_HSGRANT;
+    USBIRQ = bmHSGRANT;
 }
 
 void usb_stub_isr(void)

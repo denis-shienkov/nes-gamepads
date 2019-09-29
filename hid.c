@@ -60,11 +60,11 @@ void hid_init(void)
     sync_delay();
 
     // Reset all FIFOs.
-    FIFORESET = MSK_FIFORESET_NAKALL; // NAK all host transfers.
+    FIFORESET = bmNAKALL; // NAK all host transfers.
     sync_delay();
     FIFORESET = 0x00;
     sync_delay();
 
     // Enable dual autopointer feature.
-    AUTOPTRSETUP |= MSK_AUTOPTRSETUP_APTREN;
+    AUTOPTRSETUP |= bmAPTREN;
 }

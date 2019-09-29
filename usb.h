@@ -118,19 +118,19 @@ enum ep_buf {
 // USB irq control macros.
 #define usb_irq_enable() (EUSB = 1)
 #define usb_irq_disable() (EUSB = 0)
-#define usb_irq_clear() (EXIF &= ~MSK_EXIF_USBNT)
+#define usb_irq_clear() (EXIF &= ~bmUSBNT)
 
 // USB power control macros.
-#define usb_rsmirq_enable() (EICON |= MSK_EICON_ERESI)
-#define usb_rsmirq_disable() (EICON &= ~MSK_EICON_ERESI)
-#define usb_rsmirq_clear() (EICON &= ~MSK_EICON_RESI)
+#define usb_rsmirq_enable() (EICON |= bmERESI)
+#define usb_rsmirq_disable() (EICON &= ~bmERESI)
+#define usb_rsmirq_clear() (EICON &= ~bmRESI)
 
 #define usb_is_ext_wakeup() \
-    (((WAKEUPCS & MSK_WAKEUPCS_WU2) && (WAKEUPCS & MSK_WAKEUPCS_WU2EN)) \
-    || ((WAKEUPCS & MSK_WAKEUPCS_WU) && (WAKEUPCS & MSK_WAKEUPCS_WUEN)))
+    (((WAKEUPCS & bmWU2) && (WAKEUPCS & bmWU2EN)) \
+    || ((WAKEUPCS & bmWU) && (WAKEUPCS & bmWUEN)))
 
 #define usb_ep0_stall() \
-    EP0CS |= MSK_EP01CS_EPSTALL
+    EP0CS |= bmEPSTALL
 
 #define usb_ep_enable(ep) \
     ep |= MSK_EPCFG_VALID

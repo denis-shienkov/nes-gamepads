@@ -94,5 +94,5 @@ void hid_ep0_proc(void)
     }
 
     // Acknowledge handshake phase of device request.
-    EP0CS |= MSK_EP0CS_HSNAK;
+    EP0CS |= bmHSNAK;
 }

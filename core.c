@@ -8,10 +8,10 @@ enum cpu_freq_clk {
 };
 
 #define cpu_freq_clk_get() \
-    ((CPUCS & MSK_CPUCS_CLKSPD) >> 3)
+    ((CPUCS & bmCLKSPD) >> 3)
 
 #define cpu_freq_clk_set(freq_clk) \
-    CPUCS = (CPUCS & ~MSK_CPUCS_CLKSPD) | (freq_clk << 3)
+    CPUCS = (CPUCS & ~bmCLKSPD) | (freq_clk << 3)
 
 void core_init(void)
 {
@@ -19,7 +19,7 @@ void core_init(void)
     cpu_freq_clk_set(CPU_CLK_48M);
     sync_delay();
     // Set the slave FIFO interface to 48MHz.
-    IFCONFIG |= MSK_IFCONFIG_3048MHZ;
+    IFCONFIG |= bm3048MHZ;
     sync_delay();
 }
 

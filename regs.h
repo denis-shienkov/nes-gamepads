@@ -426,135 +426,135 @@ SPEC_FUN_REG_BIT(EIPX6, 0xF8, 4)
 
 // CPU control & status register (CPUCS).
 enum cpucs_bits {
-    MSK_CPUCS_PRTCSTB = MSK_BIT5,
-    MSK_CPUCS_CLKSPD = MSK_BIT4 | MSK_BIT3,
-    MSK_CPUCS_CLKSPD1 = MSK_BIT4,
-    MSK_CPUCS_CLKSPD0 = MSK_BIT3,
-    MSK_CPUCS_CLKINV = MSK_BIT2,
-    MSK_CPUCS_CLKOE = MSK_BIT1,
-    MSK_CPUCS_8051RES = MSK_BIT0
+    bmPRTCSTB = MSK_BIT5,
+    bmCLKSPD = MSK_BIT4 | MSK_BIT3,
+    bmCLKSPD1 = MSK_BIT4,
+    bmCLKSPD0 = MSK_BIT3,
+    bmCLKINV = MSK_BIT2,
+    bmCLKOE = MSK_BIT1,
+    bm8051RES = MSK_BIT0
 };
 
 // Port A (PORTACFG).
 enum portacfg_bits {
-    MSK_PORTACFG_FLAGD = MSK_BIT7,
-    MSK_PORTACFG_INT1 = MSK_BIT1,
-    MSK_PORTACFG_INT0 = MSK_BIT0
+    bmFLAGD = MSK_BIT7,
+    bmINT1 = MSK_BIT1,
+    bmINT0 = MSK_BIT0
 };
 
 // Port C (PORTCCFG).
 enum portccfg_bits {
-    MSK_PORTCCFG_GPIFA7 = MSK_BIT7,
-    MSK_PORTCCFG_GPIFA6 = MSK_BIT6,
-    MSK_PORTCCFG_GPIFA5 = MSK_BIT5,
-    MSK_PORTCCFG_GPIFA4 = MSK_BIT4,
-    MSK_PORTCCFG_GPIFA3 = MSK_BIT3,
-    MSK_PORTCCFG_GPIFA2 = MSK_BIT2,
-    MSK_PORTCCFG_GPIFA1 = MSK_BIT1,
-    MSK_PORTCCFG_GPIFA0 = MSK_BIT0
+    bmGPIFA7 = MSK_BIT7,
+    bmGPIFA6 = MSK_BIT6,
+    bmGPIFA5 = MSK_BIT5,
+    bmGPIFA4 = MSK_BIT4,
+    bmGPIFA3 = MSK_BIT3,
+    bmGPIFA2 = MSK_BIT2,
+    bmGPIFA1 = MSK_BIT1,
+    bmGPIFA0 = MSK_BIT0
 };
 
 // Port E (PORTECFG).
 enum portecfg_bits {
-    MSK_PORTECFG_GPIFA8 = MSK_BIT7,
-    MSK_PORTECFG_T2EX = MSK_BIT6,
-    MSK_PORTECFG_INT6 = MSK_BIT5,
-    MSK_PORTECFG_RXD1OUT = MSK_BIT4,
-    MSK_PORTECFG_RXD0OUT = MSK_BIT3,
-    MSK_PORTECFG_T2OUT = MSK_BIT2,
-    MSK_PORTECFG_T1OUT = MSK_BIT1,
-    MSK_PORTECFG_T0OUT = MSK_BIT0
+    bmGPIFA8 = MSK_BIT7,
+    bmT2EX = MSK_BIT6,
+    bmINT6 = MSK_BIT5,
+    bmRXD1OUT = MSK_BIT4,
+    bmRXD0OUT = MSK_BIT3,
+    bmT2OUT = MSK_BIT2,
+    bmT1OUT = MSK_BIT1,
+    bmT0OUT = MSK_BIT0
 };
 
 // I2C control & status register (I2CS).
 enum i2cs_bits {
-    MSK_I2CS_START = MSK_BIT7,
-    MSK_I2CS_STOP = MSK_BIT6,
-    MSK_I2CS_LASTRD = MSK_BIT5,
-    MSK_I2CS_ID = MSK_BIT4 | MSK_BIT3,
-    MSK_I2CS_BERR = MSK_BIT2,
-    MSK_I2CS_ACK = MSK_BIT1,
-    MSK_I2CS_DONE = MSK_BIT0
+    bmSTART = MSK_BIT7,
+    bmSTOP = MSK_BIT6,
+    bmLASTRD = MSK_BIT5,
+    bmID = MSK_BIT4 | MSK_BIT3,
+    bmBERR = MSK_BIT2,
+    bmACK = MSK_BIT1,
+    bmDONE = MSK_BIT0
 };
 
 // I2C control register (I2CTL).
 enum i2ctl_bits {
-    MSK_I2CTL_STOPIE = MSK_BIT1,
-    MSK_I2CTL_400KHZ = MSK_BIT0
+    bmSTOPIE = MSK_BIT1,
+    bm400KHZ = MSK_BIT0
 };
 
 // Interrupt 2 (USB) autovector register (INT2IVEC).
 enum int2ivec_bits {
-    MSK_INT2IVEC_IV4 = MSK_BIT6,
-    MSK_INT2IVEC_IV3 = MSK_BIT5,
-    MSK_INT2IVEC_IV2 = MSK_BIT4,
-    MSK_INT2IVEC_IV1 = MSK_BIT3,
-    MSK_INT2IVEC_IV0 = MSK_BIT2
+    bmIV4 = MSK_BIT6,
+    bmIV3 = MSK_BIT5,
+    bmIV2 = MSK_BIT4,
+    bmIV1 = MSK_BIT3,
+    bmIV0 = MSK_BIT2
 };
 
 // USB interrupt request & enable registers (USBIE/USBIRQ).
 enum usbieirq_bits {
-    MSK_USBIEIRQ_EP0ACK = MSK_BIT6,
-    MSK_USBIEIRQ_HSGRANT = MSK_BIT5,
-    MSK_USBIEIRQ_URES = MSK_BIT4,
-    MSK_USBIEIRQ_SUSP = MSK_BIT3,
-    MSK_USBIEIRQ_SUTOK = MSK_BIT2,
-    MSK_USBIEIRQ_SOF = MSK_BIT1,
-    MSK_USBIEIRQ_SUDAV = MSK_BIT0
+    bmEP0ACK = MSK_BIT6,
+    bmHSGRANT = MSK_BIT5,
+    bmURES = MSK_BIT4,
+    bmSUSP = MSK_BIT3,
+    bmSUTOK = MSK_BIT2,
+    bmSOF = MSK_BIT1,
+    bmSUDAV = MSK_BIT0
 };
 
 // End point interrupt request & enable registers (EPIE/EPIRQ).
 enum epieirq_bits {
-    MSK_EPIEIRQ_EP0IN  = MSK_BIT0,
-    MSK_EPIEIRQ_EP0OUT = MSK_BIT1,
-    MSK_EPIEIRQ_EP1IN  = MSK_BIT2,
-    MSK_EPIEIRQ_EP1OUT = MSK_BIT3
+    bmEP0IN  = MSK_BIT0,
+    bmEP0OUT = MSK_BIT1,
+    bmEP1IN  = MSK_BIT2,
+    bmEP1OUT = MSK_BIT3
 };
 
 // Breakpoint register (BREAKPT).
 enum breakpt_bits {
-    MSK_BREAKPT_BREAK = MSK_BIT3,
-    MSK_BREAKPT_BPPULSE = MSK_BIT2,
-    MSK_BREAKPT_BPEN = MSK_BIT1
+    bmBREAK = MSK_BIT3,
+    bmBPPULSE = MSK_BIT2,
+    bmBPEN = MSK_BIT1
 };
 
 // Interrupt 2 & 4 setup (INTSETUP).
 enum intsetup_bits {
-    MSK_INTSETUP_AV2EN = MSK_BIT3,
-    MSK_INTSETUP_INT4SRC = MSK_BIT1,
-    MSK_INTSETUP_AV4EN = MSK_BIT0
+    bmAV2EN = MSK_BIT3,
+    bmINT4SRC = MSK_BIT1,
+    bmAV4EN = MSK_BIT0
 };
 
 // USB control & status register (USBCS).
 enum usbcs_bits {
-    MSK_USBCS_HSM = MSK_BIT7,
-    MSK_USBCS_DISCON = MSK_BIT3,
-    MSK_USBCS_NOSYNSOF = MSK_BIT2,
-    MSK_USBCS_RENUM = MSK_BIT1,
-    MSK_USBCS_SIGRESUME = MSK_BIT0
+    bmHSM = MSK_BIT7,
+    bmDISCON = MSK_BIT3,
+    bmNOSYNSOF = MSK_BIT2,
+    bmRENUM = MSK_BIT1,
+    bmSIGRESUME = MSK_BIT0
 };
 
 // Wakeup control and status register (WAKEUPCS).
 enum wakeupcs_bits {
-    MSK_WAKEUPCS_WU2 = MSK_BIT7,
-    MSK_WAKEUPCS_WU = MSK_BIT6,
-    MSK_WAKEUPCS_WU2POL = MSK_BIT5,
-    MSK_WAKEUPCS_WUPOL = MSK_BIT4,
-    MSK_WAKEUPCS_DPEN = MSK_BIT2,
-    MSK_WAKEUPCS_WU2EN = MSK_BIT1,
-    MSK_WAKEUPCS_WUEN = MSK_BIT0
+    bmWU2 = MSK_BIT7,
+    bmWU = MSK_BIT6,
+    bmWU2POL = MSK_BIT5,
+    bmWUPOL = MSK_BIT4,
+    bmDPEN = MSK_BIT2,
+    bmWU2EN = MSK_BIT1,
+    bmWUEN = MSK_BIT0
 };
 
 // End point 0 control & status register (EP0CS).
 enum ep0cs_bits {
-    MSK_EP0CS_HSNAK = MSK_BIT7
+    bmHSNAK = MSK_BIT7
 };
 
 // End point 0-1 control & status registers
 // (EP0CS/EP1OUTCS/EP1INCS).
 enum ep01cs_bits {
-    MSK_EP01CS_EPBUSY = MSK_BIT1,
-    MSK_EP01CS_EPSTALL = MSK_BIT0
+    bmEPBUSY = MSK_BIT1,
+    bmEPSTALL = MSK_BIT0
 };
 
 // End point 2-8 Control & status registers
@@ -567,138 +567,138 @@ enum ep2468cs_bits {
 
 // End point status SFR bits (EP2468STAT).
 enum ep2468stat_bits {
-    MSK_EP2468STAT_EP8FULL = MSK_BIT7,
-    MSK_EP2468STAT_EP8EMPTY = MSK_BIT6,
-    MSK_EP2468STAT_EP6FULL = MSK_BIT5,
-    MSK_EP2468STAT_EP6EMPTY = MSK_BIT4,
-    MSK_EP2468STAT_EP4FULL = MSK_BIT3,
-    MSK_EP2468STAT_EP4EMPTY = MSK_BIT2,
-    MSK_EP2468STAT_EP2FULL = MSK_BIT1,
-    MSK_EP2468STAT_EP2EMPTY = MSK_BIT0
+    bmEP8FULL = MSK_BIT7,
+    bmEP8EMPTY = MSK_BIT6,
+    bmEP6FULL = MSK_BIT5,
+    bmEP6EMPTY = MSK_BIT4,
+    bmEP4FULL = MSK_BIT3,
+    bmEP4EMPTY = MSK_BIT2,
+    bmEP2FULL = MSK_BIT1,
+    bmEP2EMPTY = MSK_BIT0
 };
 
 // End point 0,1 status bits (EP01STAT).
 enum ep01stat_bits {
-    MSK_EP01STAT_EP1INBSY = MSK_BIT2,
-    MSK_EP01STAT_EP1OUTBSY = MSK_BIT1,
-    MSK_EP01STAT_EP0BSY = MSK_BIT0
+    bmEP1INBSY = MSK_BIT2,
+    bmEP1OUTBSY = MSK_BIT1,
+    bmEP0BSY = MSK_BIT0
 };
 
 // Setup data pointer auto mode (SUDPTRCTL).
 enum sudptrctl_bits {
-    MSK_SUDPTRCTL_SDPAUTO = MSK_BIT0
+    bmSDPAUTO = MSK_BIT0
 };
 
 // End point data toggle control (TOGCTL).
 enum togctl_bits {
-    MSK_TOGCTL_QUERYTOGGLE = MSK_BIT7,
-    MSK_TOGCTL_SETTOGGLE = MSK_BIT6,
-    MSK_TOGCTL_RESETTOGGLE = MSK_BIT5,
-    MSK_TOGCTL_TOGCTLEPMASK = MSK_BIT3 | MSK_BIT2 | MSK_BIT1 | MSK_BIT0
+    bmQUERYTOGGLE = MSK_BIT7,
+    bmSETTOGGLE = MSK_BIT6,
+    bmRESETTOGGLE = MSK_BIT5,
+    bmTOGCTLEPMASK = MSK_BIT3 | MSK_BIT2 | MSK_BIT1 | MSK_BIT0
 };
 
 // In bulk NAK enable and request bits (IBNIE/IBNIRQ).
 enum ibnieirq_bits {
-    MSK_IBNIEIRQ_EP8IBN = MSK_BIT5,
-    MSK_IBNIEIRQ_EP6IBN = MSK_BIT4,
-    MSK_IBNIEIRQ_EP4IBN = MSK_BIT3,
-    MSK_IBNIEIRQ_EP2IBN = MSK_BIT2,
-    MSK_IBNIEIRQ_EP1IBN = MSK_BIT1,
-    MSK_IBNIEIRQ_EP0IBN = MSK_BIT0
+    bmEP8IBN = MSK_BIT5,
+    bmEP6IBN = MSK_BIT4,
+    bmEP4IBN = MSK_BIT3,
+    bmEP2IBN = MSK_BIT2,
+    bmEP1IBN = MSK_BIT1,
+    bmEP0IBN = MSK_BIT0
 };
 
 // Ping NAK enable and request bits (NAKIE/NAKIRQ).
 enum nakieirq_bits {
-    MSK_NAKIEIRQ_EP8PING = MSK_BIT7,
-    MSK_NAKIEIRQ_EP6PING = MSK_BIT6,
-    MSK_NAKIEIRQ_EP4PING = MSK_BIT5,
-    MSK_NAKIEIRQ_EP2PING = MSK_BIT4,
-    MSK_NAKIEIRQ_EP1PING = MSK_BIT3,
-    MSK_NAKIEIRQ_EP0PING = MSK_BIT2,
-    MSK_NAKIEIRQ_IBN = MSK_BIT0
+    bmEP8PING = MSK_BIT7,
+    bmEP6PING = MSK_BIT6,
+    bmEP4PING = MSK_BIT5,
+    bmEP2PING = MSK_BIT4,
+    bmEP1PING = MSK_BIT3,
+    bmEP0PING = MSK_BIT2,
+    bmIBN = MSK_BIT0
 };
 
 // Interface configuration bits (IFCONFIG).
 enum ifconfig_bits {
-    MSK_IFCONFIG_IFCLKSRC = MSK_BIT7,
-    MSK_IFCONFIG_3048MHZ = MSK_BIT6,
-    MSK_IFCONFIG_IFCLKOE = MSK_BIT5,
-    MSK_IFCONFIG_IFCLKPOL = MSK_BIT4,
-    MSK_IFCONFIG_ASYNC = MSK_BIT3,
-    MSK_IFCONFIG_GSTATE = MSK_BIT2,
-    MSK_IFCONFIG_IFCFG1 = MSK_BIT1,
-    MSK_IFCONFIG_IFCFG0 = MSK_BIT0,
-    MSK_IFCONFIG_IFCFGMASK = MSK_IFCONFIG_IFCFG0 | MSK_IFCONFIG_IFCFG1,
-    MSK_IFCONFIG_IFGPIF = MSK_IFCONFIG_IFCFG1
+    bmIFCLKSRC = MSK_BIT7,
+    bm3048MHZ = MSK_BIT6,
+    bmIFCLKOE = MSK_BIT5,
+    bmIFCLKPOL = MSK_BIT4,
+    bmASYNC = MSK_BIT3,
+    bmGSTATE = MSK_BIT2,
+    bmIFCFG1 = MSK_BIT1,
+    bmIFCFG0 = MSK_BIT0,
+    bmIFCFGMASK = bmIFCFG0 | bmIFCFG1,
+    bmIFGPIF = bmIFCFG1
 };
 
 // End point 2,4,6,8 FIFO configuration bits
 // (EP2FIFOCFG,EP4FIFOCFG,EP6FIFOCFG,EP8FIFOCFG).
 enum ep2468fifocfg_bits {
-    MSK_EP2468FIFOCFG_INFM = MSK_BIT6,
-    MSK_EP2468FIFOCFG_OEP = MSK_BIT5,
-    MSK_EP2468FIFOCFG_AUTOOUT = MSK_BIT4,
-    MSK_EP2468FIFOCFG_AUTOIN = MSK_BIT3,
-    MSK_EP2468FIFOCFG_ZEROLENIN = MSK_BIT2,
-    MSK_EP2468FIFOCFG_WORDWIDE = MSK_BIT0
+    bmINFM = MSK_BIT6,
+    bmOEP = MSK_BIT5,
+    bmAUTOOUT = MSK_BIT4,
+    bmAUTOIN = MSK_BIT3,
+    bmZEROLENIN = MSK_BIT2,
+    bmWORDWIDE = MSK_BIT0
 };
 
 // Chip revision control bits (REVCTL).
 enum revctl_bits {
-    MSK_REVCTL_NOAUTOARM = MSK_BIT1,
-    MSK_REVCTL_SKIPCOMMIT = MSK_BIT0
+    bmNOAUTOARM = MSK_BIT1,
+    bmSKIPCOMMIT = MSK_BIT0
 };
 
 // Fifo reset bits (FIFORESET).
 enum fiforeset_bits {
-    MSK_FIFORESET_NAKALL = MSK_BIT7,
-    MSK_FIFORESET_EP3 = MSK_BIT3,
-    MSK_FIFORESET_EP2 = MSK_BIT2,
-    MSK_FIFORESET_EP1 = MSK_BIT1,
-    MSK_FIFORESET_EP0 = MSK_BIT0
+    bmNAKALL = MSK_BIT7,
+    bmEP3 = MSK_BIT3,
+    bmEP2 = MSK_BIT2,
+    bmEP1 = MSK_BIT1,
+    bmEP0 = MSK_BIT0
 };
 
 // Chip feature register (GPCR2).
 enum gpcr2_bits {
-    MSK_GPCR2_FULLSPEEDONLY = MSK_BIT4
+    bmFULLSPEEDONLY = MSK_BIT4
 };
 
 // Clock control register (CKCON).
 // Note: a RevE errata states that stretch must=0
 // to set OUTxBC.
 enum ckcon_bits {
-    MSK_CKCON_STRETCH = 0x07,
+    bmSTRETCH = 0x07,
     // Set stretch to 0 in frameworks.
-    MSK_CKCON_FW_STRETCH_VALUE = 0x0
+    bmFW_STRETCH_VALUE = 0x0
 };
 
 // External interrupt flags (EXIF).
 enum exif_bits {
-    MSK_EXIF_IE5 = MSK_BIT7,
-    MSK_EXIF_IE4 = MSK_BIT6,
-    MSK_EXIF_I2CINT = MSK_BIT5,
-    MSK_EXIF_USBNT = MSK_BIT4
+    bmIE5 = MSK_BIT7,
+    bmIE4 = MSK_BIT6,
+    bmI2CINT = MSK_BIT5,
+    bmUSBNT = MSK_BIT4
 };
 
 // External interrupt control (EICON).
 enum eicon_bits {
-    MSK_EICON_SMOD1 = MSK_BIT7,
-    MSK_EICON_ERESI = MSK_BIT5,
-    MSK_EICON_RESI = MSK_BIT4,
-    MSK_EICON_INT6 = MSK_BIT3
+    bmSMOD1 = MSK_BIT7,
+    bmERESI = MSK_BIT5,
+    bmRESI = MSK_BIT4,
+    //bmINT6 = MSK_BIT3
 };
 
 // Power control (PCON).
 enum pcon_bits {
-    MSK_PCON_SMOD0 = MSK_BIT7,
-    MSK_PCON_IDLE = MSK_BIT0
+    bmSMOD0 = MSK_BIT7,
+    bmIDLE = MSK_BIT0
 };
 
 // Autopointer 1 & 2 setup (AUTOPTRSETUP).
 enum autoptrsetup_bits {
-    MSK_AUTOPTRSETUP_APTR2INC = MSK_BIT2,
-    MSK_AUTOPTRSETUP_APTR1INC = MSK_BIT1,
-    MSK_AUTOPTRSETUP_APTREN = MSK_BIT0
+    bmAPTR2INC = MSK_BIT2,
+    bmAPTR1INC = MSK_BIT1,
+    bmAPTREN = MSK_BIT0
 };
 
 #ifdef __cplusplus
