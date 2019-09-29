@@ -1,11 +1,6 @@
 .module fx2jmptable
 
-.globl  _usb_sudav_isr
-.globl  _usb_sutok_isr
 .globl  _usb_sof_isr
-.globl  _usb_ures_isr
-.globl  _usb_susp_isr
-.globl  _usb_hispeed_isr
 .globl  _usb_stub_isr
 
 ;; USB interrupt vector (USBINT).
@@ -25,17 +20,17 @@
 _jmp_table:
 
 ;; int2 jump table
-    ljmp    _usb_sudav_isr    ; (00) Setup data available.
+    ljmp    _usb_stub_isr     ; (00) Setup data available.
     .db 0
     ljmp    _usb_sof_isr      ; (04) Start of frame.
     .db 0
-    ljmp    _usb_sutok_isr    ; (08) Setup data loading.
+    ljmp    _usb_stub_isr     ; (08) Setup data loading.
     .db 0
-    ljmp    _usb_susp_isr     ; (0C) Global suspend.
+    ljmp    _usb_stub_isr     ; (0C) Global suspend.
     .db 0
-    ljmp    _usb_ures_isr     ; (10) USB reset.
+    ljmp    _usb_stub_isr     ; (10) USB reset.
     .db 0
-    ljmp    _usb_hispeed_isr  ; (14) Entered high speed.
+    ljmp    _usb_stub_isr     ; (14) Entered high speed.
     .db 0
     ljmp    _usb_stub_isr     ; (18) EP0 ack.
     .db 0

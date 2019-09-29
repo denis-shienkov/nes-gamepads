@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-void hid_init(void);
+void hid_ep_init(void);
 void hid_ep0_proc(void);
 void hid_stream_proc(void);
 

@@ -53,7 +53,7 @@ enum usb_setup_get_descriptor_code {
     USB_SETUP_GD_CONFIGURATION = 0x02, // Get configuration descriptor.
     USB_SETUP_GD_STRING = 0x03, // Get string descriptor.
     USB_SETUP_GD_INTERFACE = 0x04, // Get interface descriptor.
-    USB_SETUP_GD_ENDPOINT = 0x05, // Get endpoint descriptor.
+    USB_SETUP_GD_ENDPOINT = 0x05, // Get end point descriptor.
     USB_SETUP_GD_DEVICE_QUALIFIER = 0x06, // Get device qualifier descriptor.
     USB_SETUP_GD_OTHER_SPEED_CONFIGURATION = 0x07, // Get other configuration descriptor.
     USB_SETUP_GD_INTERFACE_POWER = 0x08, // Get interface power descriptor.
@@ -61,16 +61,13 @@ enum usb_setup_get_descriptor_code {
     USB_SETUP_GD_REPORT = 0x22 // Get report descriptor.
 };
 
-//#define FT_DEVICE          0x00  // Feature: Device
-//#define FT_ENDPOINT        0x02  // Feature: End Point
-
 // Descriptor type.
 enum usb_descriptor_type {
     USB_DSCR_TYPE_DEVICE = 0x01, // Standard device descriptor.
     USB_DSCR_TYPE_CONFIG = 0x02, // Standard configuration descriptor.
     USB_DSCR_TYPE_STRING = 0x03, // String descriptor.
     USB_DSCR_TYPE_INTERFACE = 0x04, // Standard interface descriptor.
-    USB_DSCR_TYPE_ENDPOINT = 0x05, // Standard endpoint descriptor.
+    USB_DSCR_TYPE_ENDPOINT = 0x05, // Standard end point descriptor.
     USB_DSCR_TYPE_DEVQUAL = 0x06, // Device qualifier descriptor.
     USB_DSCR_TYPE_OTHERSPEED = 0x07, // Other speed configuration descriptor.
     USB_DSCR_TYPE_IFACEPOWER = 0x08,
@@ -81,11 +78,11 @@ enum usb_descriptor_type {
 
 // End point configuration (EP1INCFG/EP1OUTCFG/EP2/EP4/EP6/EP8).
 enum epcfg_bits {
-    MSK_EPCFG_VALID = MSK_BIT7,
-    MSK_EPCFG_DIR = MSK_BIT6, // Only for EP2-EP8!
-    MSK_EPCFG_TYPE = MSK_BIT5 | MSK_BIT4,
-    MSK_EPCFG_SIZE = MSK_BIT3, // Only for EP2-EP8!
-    MSK_EPCFG_BUF = MSK_BIT1 | MSK_BIT0 // Only for EP2-EP8!
+    bmEP_VALID = bmBIT7,
+    bmEP_DIR = bmBIT6, // Only for EP2-EP8!
+    bmEP_TYPE = bmBIT5 | bmBIT4,
+    bmEP_SIZE = bmBIT3, // Only for EP2-EP8!
+    bmEP_BUF = bmBIT1 | bmBIT0 // Only for EP2-EP8!
 };
 
 // Only for EP2-EP8!
@@ -115,40 +112,36 @@ enum ep_buf {
     EP_BUF_TRIPLE = 3
 };
 
-// USB irq control macros.
-#define usb_irq_enable() (EUSB = 1)
-#define usb_irq_disable() (EUSB = 0)
-#define usb_irq_clear() (EXIF &= ~bmUSBNT)
-
-// USB power control macros.
-#define usb_rsmirq_enable() (EICON |= bmERESI)
-#define usb_rsmirq_disable() (EICON &= ~bmERESI)
-#define usb_rsmirq_clear() (EICON &= ~bmRESI)
+#define usb_disconnect() (USBCS |= bmDISCON)
+#define usb_connect() (USBCS &= ~bmDISCON)
 
 #define usb_is_ext_wakeup() \
     (((WAKEUPCS & bmWU2) && (WAKEUPCS & bmWU2EN)) \
     || ((WAKEUPCS & bmWU) && (WAKEUPCS & bmWUEN)))
 
+#define usb_is_high_speed() \
+    (USBCS & bmHSM)
+
 #define usb_ep0_stall() \
     EP0CS |= bmEPSTALL
 
 #define usb_ep_enable(ep) \
-    ep |= MSK_EPCFG_VALID
+    ep |= bmEP_VALID
 
 #define usb_ep_disable(ep) \
-    ep &= ~MSK_EPCFG_VALID
+    ep &= ~bmEP_VALID
 
 #define usb_ep_dir_set(ep, dir) \
-    ep = ((ep & ~MSK_EPCFG_DIR) | (dir << 6))
+    ep = ((ep & ~bmEP_DIR) | (dir << 6))
 
 #define usb_ep_type_set(ep, type) \
-    ep = ((ep & ~MSK_EPCFG_TYPE) | (type << 4))
+    ep = ((ep & ~bmEP_TYPE) | (type << 4))
 
 #define usb_ep_size_set(ep, size) \
-    ep = ((ep & ~MSK_EPCFG_DIR) | (size << 3))
+    ep = ((ep & ~bmEP_DIR) | (size << 3))
 
 #define usb_ep_buf_set(ep, buf) \
-    ep = ((ep & ~MSK_EPCFG_BUF) | (buf << 0))
+    ep = ((ep & ~bmEP_BUF) | (buf << 0))
 
 #define usb_word_msb_get(word) \
     (BYTE)(((WORD)(word) >> 8) & 0xFF)
@@ -181,10 +174,6 @@ enum ep_buf {
 
 void usb_init(void);
 void usb_task(void);
-//void usb_remote_wakeup_set(BOOL set);
-BOOL usb_remote_wakeup_get(void);
-BOOL usb_self_pwr_get(void);
-BOOL usb_is_hispeed_supported(void);
 
 #ifdef __cplusplus
 }

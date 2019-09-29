@@ -28,15 +28,15 @@ static void ep0_get_status_proc(void)
     case USB_SETUP_RD_DEVICE_TO_HOST: {
         switch (usb_setup_request_recipient_get()) {
         case USB_SETUP_RR_DEVICE: {
-            const BOOL rwuen = usb_remote_wakeup_get();
-            const BOOL selfpwr = usb_self_pwr_get();
-            send_status(((BYTE)rwuen << 1) | (BYTE)selfpwr);
+            ///const BOOL rwuen = usb_remote_wakeup_get();
+            ///const BOOL selfpwr = usb_self_pwr_get();
+            ///send_status(((BYTE)rwuen << 1) | (BYTE)selfpwr);
         }
             return;
         case USB_SETUP_RR_IFACE: // Reserved, return 0.
             send_status(0);
             return;
-        case USB_SETUP_RR_EP: // Return endpoint status (unused?).
+        case USB_SETUP_RR_EP: // Return end point status (unused?).
             send_status(0);
             return;
         default:

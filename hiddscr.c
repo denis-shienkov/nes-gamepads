@@ -97,7 +97,7 @@ BYTE *hid_descriptor_ptr_get(void)
     case USB_SETUP_GD_DEVICE:
         return (BYTE *)g_device_dscr;
     case USB_SETUP_GD_DEVICE_QUALIFIER:
-        return (BYTE *)(usb_is_hispeed_supported()
+        return (BYTE *)(usb_is_high_speed()
                 ? g_device_qual_dscr : NULL);
     case USB_SETUP_GD_CONFIGURATION:
         return (BYTE *)g_config_dscr;

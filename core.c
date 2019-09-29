@@ -17,10 +17,18 @@ void core_init(void)
 {
     // Set the CPU clock to 48MHz.
     cpu_freq_clk_set(CPU_CLK_48M);
-    sync_delay();
     // Set the slave FIFO interface to 48MHz.
     IFCONFIG |= bm3048MHZ;
-    sync_delay();
+    // Set stretch to 0.
+    CKCON = ((CKCON & (~bmSTRETCH)) | FW_STRETCH1);
+    // Clear breakpoint register.
+    BREAKPT = 0;
+    // Set all 8051 interrupts to low priority
+    IP = 0;
+    // Clear interrupt enable bits.
+    EIE = 0;
+    // Clear all external interrupt flags.
+    EXIF = 0;
 }
 
 void core_delay(WORD msecs)

@@ -2,7 +2,7 @@ $nomod51
 
 name    fx2jmptable
 
-extrn code(usb_sudav_isr, usb_sutok_isr, usb_sof_isr, usb_ures_isr, usb_susp_isr, usb_hispeed_isr)
+extrn code(usb_sof_isr)
 extrn code(usb_stub_isr)
 
 ;; USB interrupt vector (USBINT).
@@ -21,17 +21,17 @@ extrn code(usb_stub_isr)
 jmp_table:
 
 ;; int2 jump table
-    ljmp    usb_sudav_isr    ; (00) Setup data available.
+    ljmp    usb_stub_isr     ; (00) Setup data available.
     db  0
     ljmp    usb_sof_isr      ; (04) Start of frame.
     db  0
-    ljmp    usb_sutok_isr    ; (08) Setup data loading.
+    ljmp    usb_stub_isr     ; (08) Setup data loading.
     db  0
-    ljmp    usb_susp_isr     ; (0C) Global suspend.
+    ljmp    usb_stub_isr     ; (0C) Global suspend.
     db  0
-    ljmp    usb_ures_isr     ; (10) USB reset.
+    ljmp    usb_stub_isr     ; (10) USB reset.
     db  0
-    ljmp    usb_hispeed_isr  ; (14) Entered high speed.
+    ljmp    usb_stub_isr     ; (14) Entered high speed.
     db  0
     ljmp    usb_stub_isr     ; (18) EP0 ack.
     db  0

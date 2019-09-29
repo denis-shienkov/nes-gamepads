@@ -6,6 +6,19 @@
 #include "irqs.h"
 #include "usb.h"
 
+static void hw_init(void)
+{
+    usb_disconnect();
+    core_delay(100);
+    code_all_irq_disable();
+
+    core_init();
+    usb_init();
+
+    usb_connect();
+    code_all_irq_enable();
+}
+
 static void loop_exec(void)
 {
     while (TRUE) {
@@ -15,13 +28,7 @@ static void loop_exec(void)
 
 int main(void)
 {
-    core_init();
-    usb_init();
+    hw_init();
     loop_exec();
     return 0;
-}
-
-INTERRUPT(usb_resume_isr, WKUP_IRQ)
-{
-    usb_rsmirq_clear();
 }

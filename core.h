@@ -236,6 +236,9 @@ extern "C" {
     NOP(); }
 #endif
 
+#define code_all_irq_disable() (IE = 0)
+#define code_all_irq_enable() (IE = 1)
+
 void core_init(void);
 void core_delay(WORD msec);
 

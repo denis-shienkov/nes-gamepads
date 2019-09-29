@@ -6,14 +6,14 @@ extern "C" {
 #endif
 
 enum bit_mask {
-    MSK_BIT0 = 0x01,
-    MSK_BIT1 = 0x02,
-    MSK_BIT2 = 0x04,
-    MSK_BIT3 = 0x08,
-    MSK_BIT4 = 0x10,
-    MSK_BIT5 = 0x20,
-    MSK_BIT6 = 0x40,
-    MSK_BIT7 = 0x80
+    bmBIT0 = 0x01,
+    bmBIT1 = 0x02,
+    bmBIT2 = 0x04,
+    bmBIT3 = 0x08,
+    bmBIT4 = 0x10,
+    bmBIT5 = 0x20,
+    bmBIT6 = 0x40,
+    bmBIT7 = 0x80
 };
 
 enum boolean {
