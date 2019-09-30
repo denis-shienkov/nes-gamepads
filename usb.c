@@ -53,7 +53,7 @@ void usb_task(void)
     if ((USBIRQ & bmSUDAV) != 0) {
         USBIRQ = bmSUDAV;
         // Setup packet available.
-        hid_ep0_proc();
+        hid_ep0_setup_proc();
     }
 
     if ((USBIRQ & bmEP0ACK) != 0) {
@@ -74,18 +74,15 @@ void usb_task(void)
         // Host has taken a packet from the end point.
         EPIRQ = bmEP0IN;
         // This will arm the end point.
-        ///UsbEp0InHandler();
+        hid_ep0_in_proc();
     }
 
     if ((EPIRQ & bmEP0OUT) != 0) {
         // Host has placed a packet to the end point.
         EPIRQ = bmEP0OUT;
         // This will arm the end point.
-        ///UsbEp0OutHandler();
+        hid_ep0_out_proc();
     }
-
-    // Process data end points.
-    hid_stream_proc();
 }
 
 void usb_sof_isr(void)

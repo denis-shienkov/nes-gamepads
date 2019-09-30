@@ -103,7 +103,6 @@ CppApplication {
         "hid.h",
         "hiddscr.c",
         "hidep0.c",
-        "hidstream.c",
         "irqs.h",
         "main.c",
         "regs.h",

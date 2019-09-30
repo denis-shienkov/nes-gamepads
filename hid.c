@@ -28,4 +28,6 @@ void hid_ep_init(void)
     sync_delay();
     FIFORESET = 0x00;
     sync_delay();
+
+    hid_ep0_init();
 }

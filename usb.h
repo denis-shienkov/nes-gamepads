@@ -7,73 +7,79 @@
 extern "C" {
 #endif
 
+enum usb_setup_bmreq_bits {
+    bmSETUP_DIR = bmBIT7,
+    bmSETUP_TYPE = bmBIT5 | bmBIT6,
+    bmSETUP_RECIPIENT = bmBIT0 | bmBIT1 | bmBIT2 | bmBIT3 | bmBIT4
+};
+
 // Setup request direction.
-enum usb_setup_req_direction {
-    USB_SETUP_RD_HOST_TO_DEVICE = 0x00, // From host to sevice direction.
-    USB_SETUP_RD_DEVICE_TO_HOST = 0x01 // From device to host direction.
+enum usb_setup_req_direction_bits {
+    bmSETUP_TO_DEVICE = 0, // From host to sevice direction.
+    bmSETUP_TO_HOST = bmBIT7 // From device to host direction.
 };
 
 // Setup request type.
-enum usb_setup_req_type {
-    USB_SETUP_RT_STANDARD = 0x00, // Standard request.
-    USB_SETUP_RT_CLASS = 0x01, // Class request.
-    USB_SETUP_RT_VENDOR = 0x02, // Vendor request.
-    USB_SETUP_RT_RESERVED = 0x03 // Reserved or illegal request.
+enum usb_setup_req_type_bits {
+    bmSETUP_STANDARD = 0, // Standard request.
+    bmSETUP_CLASS = bmBIT5, // Class request.
+    bmSETUP_VENDOR = bmBIT6, // Vendor request.
 };
 
 // Setup request recipient.
-enum usb_setup_req_recipient {
-    USB_SETUP_RR_DEVICE = 0x00, // Device recipient.
-    USB_SETUP_RR_IFACE = 0x01, // Interface recipient.
-    USB_SETUP_RR_EP = 0x02, // End point recipient.
-    USB_SETUP_RR_OTHER = 0x03 // Other recipient.
+enum usb_setup_req_recipient_bits {
+    bmSETUP_DEVICE = 0, // Device recipient.
+    bmSETUP_IFACE = bmBIT0, // Interface recipient.
+    bmSETUP_EP = bmBIT1, // End point recipient.
+    bmSETUP_OTHER = bmBIT0 | bmBIT1 // Other recipient.
 };
 
 // Setup request code.
 enum usb_setup_req_code {
-    USB_SETUP_RC_GET_STATUS = 0x00, // Get status code.
-    USB_SETUP_RC_CLEAR_FEATURE = 0x01, // Clear feature code.
-    USB_SETUP_RC_RESERVED1 = 0x02, // Reserved code.
-    USB_SETUP_RC_SET_FEATURE = 0x03, // Set feature code.
-    USB_SETUP_RC_RESERVED2 = 0x04, // Reserved code.
-    USB_SETUP_RC_SET_ADDRESS = 0x05, // Set address code.
-    USB_SETUP_RC_GET_DESCRIPTOR = 0x06, // Get descriptor code.
-    USB_SETUP_RC_SET_DESCRIPTOR = 0x07, // Set descriptor code.
-    USB_SETUP_RC_GET_CONFIGURATION = 0x08, // Get configuration code.
-    USB_SETUP_RC_SET_CONFIGURATION = 0x09, // Set configuration code.
-    USB_SETUP_RC_GET_INTERFACE = 0x0A, // Get interface code.
-    USB_SETUP_RC_SET_INTERFACE = 0x0B, // Set interface code.
-    USB_SETUP_RC_SYNC_FRAME = 0x0C, // Sync frame code.
-    USB_SETUP_RC_ANCHOR_LOAD = 0xA0 // Anchor load code.
+    USB_SETUP_GET_STATUS = 0x00, // Get status code.
+    USB_SETUP_CLEAR_FEATURE = 0x01, // Clear feature code.
+    USB_SETUP_RESERVED1 = 0x02, // Reserved code.
+    USB_SETUP_SET_FEATURE = 0x03, // Set feature code.
+    USB_SETUP_RESERVED2 = 0x04, // Reserved code.
+    USB_SETUP_SET_ADDRESS = 0x05, // Set address code.
+    USB_SETUP_GET_DESCRIPTOR = 0x06, // Get descriptor code.
+    USB_SETUP_SET_DESCRIPTOR = 0x07, // Set descriptor code.
+    USB_SETUP_GET_CONFIGURATION = 0x08, // Get configuration code.
+    USB_SETUP_SET_CONFIGURATION = 0x09, // Set configuration code.
+    USB_SETUP_GET_INTERFACE = 0x0A, // Get interface code.
+    USB_SETUP_SET_INTERFACE = 0x0B, // Set interface code.
+    USB_SETUP_SYNC_FRAME = 0x0C, // Sync frame code.
+    USB_SETUP_ANCHOR_LOAD = 0xA0 // Anchor load code.
+};
+
+// Standard status responses.
+enum usb_setup_status_code {
+    USB_STATUS_SELF_POWERED = 0x01,
+    USB_STATUS_REMOTE_WAKEUP = 0x02
+};
+
+// Standard feature selectors.
+enum usb_setup_feature_selector {
+    USB_FEATURE_STALL = 0x00,
+    USB_FEATURE_REMOTE_WAKEUP = 0x01,
+    USB_FEATRUE_TEST_MODE = 0x02
 };
 
 // Get descriptor codes.
 enum usb_setup_get_descriptor_code {
-    USB_SETUP_GD_DEVICE = 0x01, // Get device descriptor.
-    USB_SETUP_GD_CONFIGURATION = 0x02, // Get configuration descriptor.
-    USB_SETUP_GD_STRING = 0x03, // Get string descriptor.
-    USB_SETUP_GD_INTERFACE = 0x04, // Get interface descriptor.
-    USB_SETUP_GD_ENDPOINT = 0x05, // Get end point descriptor.
-    USB_SETUP_GD_DEVICE_QUALIFIER = 0x06, // Get device qualifier descriptor.
-    USB_SETUP_GD_OTHER_SPEED_CONFIGURATION = 0x07, // Get other configuration descriptor.
-    USB_SETUP_GD_INTERFACE_POWER = 0x08, // Get interface power descriptor.
-    USB_SETUP_GD_HID = 0x21, // Get HID descriptor.
-    USB_SETUP_GD_REPORT = 0x22 // Get report descriptor.
-};
-
-// Descriptor type.
-enum usb_descriptor_type {
-    USB_DSCR_TYPE_DEVICE = 0x01, // Standard device descriptor.
-    USB_DSCR_TYPE_CONFIG = 0x02, // Standard configuration descriptor.
-    USB_DSCR_TYPE_STRING = 0x03, // String descriptor.
-    USB_DSCR_TYPE_INTERFACE = 0x04, // Standard interface descriptor.
-    USB_DSCR_TYPE_ENDPOINT = 0x05, // Standard end point descriptor.
-    USB_DSCR_TYPE_DEVQUAL = 0x06, // Device qualifier descriptor.
-    USB_DSCR_TYPE_OTHERSPEED = 0x07, // Other speed configuration descriptor.
-    USB_DSCR_TYPE_IFACEPOWER = 0x08,
-    USB_DSCR_TYPE_OTG = 0x09,
-    USB_DSCR_TYPE_DEBUG = 0x0A,
-    USB_DSCR_TYPE_IFACEASSOC = 0x0B // Interface Association descriptor.
+    USB_DESC_DEVICE = 0x01, // Device descriptor.
+    USB_DESC_CONFIGURATION = 0x02, // Configuration descriptor.
+    USB_DESC_STRING = 0x03, // String descriptor.
+    USB_DESC_INTERFACE = 0x04, // Interface descriptor.
+    USB_DESC_ENDPOINT = 0x05, // End point descriptor.
+    USB_DESC_DEVICE_QUALIFIER = 0x06, // Device qualifier descriptor.
+    USB_DESC_OTHER_SPEED_CONFIGURATION = 0x07, // Other configuration descriptor.
+    USB_DESC_INTERFACE_POWER = 0x08, // Interface power descriptor.
+    USB_DESC_OTG = 0x09, // OTG descriptor.
+    USB_DESC_DEBUG = 0x0A, // Debug descriptor.
+    USB_DESC_INTERFACE_ASSOC = 0x0B, // Interface association descriptor.
+    USB_DESC_HID = 0x21, // Get HID descriptor.
+    USB_DESC_REPORT = 0x22 // Get report descriptor.
 };
 
 // End point configuration (EP1INCFG/EP1OUTCFG/EP2/EP4/EP6/EP8).
@@ -115,6 +121,11 @@ enum ep_buf {
     EP_TRIPLE = bmBIT0 | bmBIT1
 };
 
+struct ep0_buf {
+    BYTE *dat;
+    WORD len;
+};
+
 #define usb_disconnect() (USBCS |= bmDISCON)
 #define usb_connect() (USBCS &= ~bmDISCON)
 
@@ -127,6 +138,14 @@ enum ep_buf {
 
 #define usb_ep0_stall() \
     EP0CS |= bmEPSTALL
+
+#define usb_ep0_hsnack() \
+    EP0CS |= bmHSNAK
+
+#define usb_ep0_out_enable() \
+    sync_delay(); \
+    EP0BCL = 0x80; \
+    sync_delay();
 
 #define usb_word_msb_get(word) \
     (BYTE)(((WORD)(word) >> 8) & 0xFF)
@@ -142,20 +161,6 @@ enum ep_buf {
     (((DWORD)((x) & 0x0000FF00ul)) << 8) | \
     (((DWORD)((x) & 0x00FF0000ul)) >> 8) | \
     (((DWORD)((x) & 0xFF000000ul)) >> 24))
-
-// Macros to parse the FX2 SETUPDAT registers.
-#define usb_setup_type_get() (SETUPDAT[0]) // bmRequestType.
-#define usb_setup_request_direction_get() ((SETUPDAT[0] >> 0x07) & 0x01)
-#define usb_setup_request_type_get() ((SETUPDAT[0] >> 0x05) & 0x03)
-#define usb_setup_request_recipient_get() (SETUPDAT[0] & 0x1F)
-#define usb_setup_request_get() (SETUPDAT[1]) // bRequest.
-#define usb_setup_wvaluel_get() (SETUPDAT[2]) // wValueL.
-#define usb_setup_wvalueh_get() (SETUPDAT[3]) // wValueH.
-#define usb_setup_windexl_get() (SETUPDAT[4]) // wIndexL.
-#define usb_setup_windexh_get() (SETUPDAT[5]) // wIndexH.
-#define usb_setup_value_get() (usb_word_swap(*(WORD*)&SETUPDAT[2])) // wValue.
-#define usb_setup_index_get() (usb_word_swap(*(WORD*)&SETUPDAT[4])) // wIndex.
-#define usb_setup_data_length_get() (usb_word_swap(*(WORD*)&SETUPDAT[6])) // wLength.
 
 void usb_init(void);
 void usb_task(void);
