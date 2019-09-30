@@ -5,58 +5,22 @@
 void hid_ep_init(void)
 {
     // Disable end point 1 output.
-    usb_ep_disable(EP1OUTCFG);
+    EP1OUTCFG = (EP1OUTCFG & ~bmEP_VALID) | bmEP_DISABLE;
     sync_delay();
-
-    // Enable end point 1 as input interrupt mode.
-    usb_ep_enable(EP1INCFG);
+    // Enable end point 1 input in interrupt mode.
+    EP1INCFG = bmEP_ENABLE | bmEP_INT;
     sync_delay();
-    usb_ep_type_set(EP1INCFG, EP_TYPE_INTERRUPT);
+    // Disable end point 2.
+    EP2CFG = (EP2CFG & ~bmEP_VALID) | bmEP_DISABLE;
     sync_delay();
-
-    // Enable end point 2 as input interrupt mode
-    // with 512 bytes size and quad buffering.
-    usb_ep_enable(EP2CFG);
+    // Disable end point 4.
+    EP4CFG = (EP4CFG & ~bmEP_VALID) | bmEP_DISABLE;
     sync_delay();
-    usb_ep_dir_set(EP2CFG, EP_DIR_IN);
+    // Disable end point 6.
+    EP6CFG = (EP6CFG & ~bmEP_VALID) | bmEP_DISABLE;
     sync_delay();
-    usb_ep_type_set(EP2CFG, EP_TYPE_INTERRUPT);
-    sync_delay();
-    usb_ep_size_set(EP2CFG, EP_SIZE_512);
-    sync_delay();
-    usb_ep_buf_set(EP2CFG, EP_BUF_QUAD);
-    sync_delay();
-
-    // Enable end point 6 as output bulk mode
-    // with 512 bytes size and double buffering.
-    usb_ep_enable(EP6CFG);
-    sync_delay();
-    usb_ep_dir_set(EP6CFG, EP_DIR_OUT);
-    sync_delay();
-    usb_ep_type_set(EP6CFG, EP_TYPE_BULK);
-    sync_delay();
-    usb_ep_size_set(EP6CFG, EP_SIZE_512);
-    sync_delay();
-    usb_ep_buf_set(EP6CFG, EP_BUF_DOUBLE);
-    sync_delay();
-
-    // Enable end point 8 as input bulk mode
-    // with 512 bytes size and double buffering.
-    usb_ep_enable(EP8CFG);
-    sync_delay();
-    usb_ep_dir_set(EP8CFG, EP_DIR_IN);
-    sync_delay();
-    usb_ep_type_set(EP8CFG, EP_TYPE_BULK);
-    sync_delay();
-    usb_ep_size_set(EP8CFG, EP_SIZE_512);
-    sync_delay();
-    usb_ep_buf_set(EP8CFG, EP_BUF_DOUBLE);
-    sync_delay();
-
-    // Arm EP6OUT by writing byte count w/skip.
-    EP6BCL = 0x80;
-    sync_delay();
-    EP6BCL = 0x80;
+    // Disable end point 8.
+    EP8CFG = (EP8CFG & ~bmEP_VALID) | bmEP_DISABLE;
     sync_delay();
 
     // Reset all FIFOs.

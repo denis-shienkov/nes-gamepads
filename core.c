@@ -15,20 +15,27 @@ enum cpu_freq_clk {
 
 void core_init(void)
 {
-    // Set the CPU clock to 48MHz.
+    // Set CPU clock to 48MHz.
     cpu_freq_clk_set(CPU_CLK_48M);
-    // Set the slave FIFO interface to 48MHz.
-    IFCONFIG |= bm3048MHZ;
+    sync_delay();
+    // Set interface to ports.
+    IFCONFIG = (IFCONFIG & (~bmIFCFG)) | bmIFPORTS;
+    sync_delay();
     // Set stretch to 0.
-    CKCON = ((CKCON & (~bmSTRETCH)) | FW_STRETCH1);
+    CKCON = ((CKCON & (~bmSTRETCH)) | bmFW_STRETCH1);
+    sync_delay();
     // Clear breakpoint register.
     BREAKPT = 0;
+    sync_delay();
     // Set all 8051 interrupts to low priority
     IP = 0;
+    sync_delay();
     // Clear interrupt enable bits.
     EIE = 0;
+    sync_delay();
     // Clear all external interrupt flags.
     EXIF = 0;
+    sync_delay();
 }
 
 void core_delay(WORD msecs)

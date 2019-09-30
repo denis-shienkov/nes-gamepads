@@ -6,32 +6,46 @@ void usb_init(void)
 {
     // Disable all USB interrupts.
     USBIE = 0;
+    sync_delay();
     // Disable all end point interrupts.
     EPIE = 0;
+    sync_delay();
     // Disable all end point ping-nak interrupts.
     NAKIE = 0;
+    sync_delay();
     // Disable all USB error interrupts.
     USBERRIE = 0;
+    sync_delay();
     // Enable USB interrupt 2 autovectoring.
     INTSETUP |= bmAV2EN;
+    sync_delay();
     // Clear USB interrupt requests.
-    USBIRQ = bmSUDAV | bmSOF | bmSUTOK | bmSUSP | bmURES | bmHSGRANT | bmEP0ACK;
+    USBIRQ = bmSUDAV | bmSOF | bmSUTOK | bmSUSP
+            | bmURES | bmHSGRANT | bmEP0ACK;
+    sync_delay();
     // Clear end point interrupt requests.
-    EPIRQ  = 0xff;
+    EPIRQ = bmEP0IN | bmEP0OUT | bmEP1IN | bmEP1OUT
+            | bmEP2 | bmEP4 | bmEP6 | bmEP8;
+    sync_delay();
     // Handle only SOF interrupt directly.
     USBIE = bmSOF;
+    sync_delay();
     // Set USB interrupt to high priority.
     PUSB = 1;
+    sync_delay();
     // Enable USB interrupts.
     EUSB = 1;
+    sync_delay();
     // As we use SOFs to detect disconnect we have
     // to disable SOF synthesizing.
     USBCS |= bmNOSYNSOF;
+    sync_delay();
 
     hid_ep_init();
 
     // Set the RENUM to disable FX2-internal enumeration support.
     USBCS |= bmRENUM;
+    sync_delay();
 }
 
 void usb_task(void)

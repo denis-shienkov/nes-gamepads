@@ -9,7 +9,7 @@
 static void hw_init(void)
 {
     usb_disconnect();
-    core_delay(100);
+    core_delay(500);
     code_all_irq_disable();
 
     core_init();
@@ -19,7 +19,7 @@ static void hw_init(void)
     code_all_irq_enable();
 }
 
-static void loop_exec(void)
+static void hw_loop_exec(void)
 {
     while (TRUE) {
         usb_task();
@@ -29,6 +29,6 @@ static void loop_exec(void)
 int main(void)
 {
     hw_init();
-    loop_exec();
+    hw_loop_exec();
     return 0;
 }

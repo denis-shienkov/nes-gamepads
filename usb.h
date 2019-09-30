@@ -85,31 +85,34 @@ enum epcfg_bits {
     bmEP_BUF = bmBIT1 | bmBIT0 // Only for EP2-EP8!
 };
 
+enum ep_valid_bits {
+    bmEP_DISABLE = 0,
+    bmEP_ENABLE = bmBIT7
+};
+
 // Only for EP2-EP8!
 enum ep_direction {
-    EP_DIR_OUT = 0,
-    EP_DIR_IN = 1
+    bmEP_OUT = 0,
+    bmEP_IN = bmBIT6
 };
 
 enum ep_type {
-    EP_TYPE_INVALID = 0,
-    EP_TYPE_ISOCHRONOUS = 1, // Only for EP2-EP8!
-    EP_TYPE_BULK = 2, // Default value.
-    EP_TYPE_INTERRUPT = 3
+    bmEP_ISO = bmBIT4, // Only for EP2-EP8!
+    bmEP_BULK = bmBIT5, // Default value.
+    bmEP_INT = bmBIT4 | bmBIT5
 };
 
 // Only for EP2-EP8!
 enum ep_size {
-    EP_SIZE_512 = 0,
-    EP_SIZE_1024 = 1 // Except EP4/EP8.
+    EP_512 = 0,
+    EP_1024 = bmBIT3 // Except EP4/EP8.
 };
 
 // Only for EP2-EP8!
 enum ep_buf {
-    EP_BUF_QUAD = 0,
-    EP_BUF_INVALID = 1,
-    EP_BUF_DOUBLE = 2, // Default value.
-    EP_BUF_TRIPLE = 3
+    EP_QUAD = 0,
+    EP_DOUBLE = bmBIT1, // Default value.
+    EP_TRIPLE = bmBIT0 | bmBIT1
 };
 
 #define usb_disconnect() (USBCS |= bmDISCON)
@@ -124,24 +127,6 @@ enum ep_buf {
 
 #define usb_ep0_stall() \
     EP0CS |= bmEPSTALL
-
-#define usb_ep_enable(ep) \
-    ep |= bmEP_VALID
-
-#define usb_ep_disable(ep) \
-    ep &= ~bmEP_VALID
-
-#define usb_ep_dir_set(ep, dir) \
-    ep = ((ep & ~bmEP_DIR) | (dir << 6))
-
-#define usb_ep_type_set(ep, type) \
-    ep = ((ep & ~bmEP_TYPE) | (type << 4))
-
-#define usb_ep_size_set(ep, size) \
-    ep = ((ep & ~bmEP_DIR) | (size << 3))
-
-#define usb_ep_buf_set(ep, buf) \
-    ep = ((ep & ~bmEP_BUF) | (buf << 0))
 
 #define usb_word_msb_get(word) \
     (BYTE)(((WORD)(word) >> 8) & 0xFF)
