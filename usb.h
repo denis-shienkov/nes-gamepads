@@ -136,16 +136,15 @@ struct ep0_buf {
 #define usb_is_high_speed() \
     (USBCS & bmHSM)
 
+#define usp_ep_reset_toggle(ep) \
+    TOGCTL = (((ep & 0x80) >> 3) + (ep & 0x0F)); \
+    TOGCTL |= bmRESETTOGGLE
+
 #define usb_ep0_stall() \
     EP0CS |= bmEPSTALL
 
 #define usb_ep0_hsnack() \
     EP0CS |= bmHSNAK
-
-#define usb_ep0_out_enable() \
-    sync_delay(); \
-    EP0BCL = 0x80; \
-    sync_delay();
 
 #define usb_word_msb_get(word) \
     (BYTE)(((WORD)(word) >> 8) & 0xFF)

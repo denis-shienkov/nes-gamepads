@@ -91,74 +91,58 @@ static const BYTE CODE g_serialno_str_desc[] = {
     0x00
 };
 
-struct ep0_buf hid_ep0_desc_get(BYTE desc_type, BYTE target_index, BOOL hspeed)
-{
-    struct ep0_buf buf = {0};
+static const BYTE CODE g_hid_desc[] = {
+    0x0F, // Descriptor length.
+};
 
-    switch (desc_type) {
+static const BYTE CODE g_hid_report_desc[] = {
+    0x0F, // Descriptor length.
+};
+
+BYTE *hid_ep0_desc_get(void)
+{
+    switch (SETUPDAT[3]) {
 
     case USB_DESC_DEVICE:
-        buf.dat = g_device_desc;
-        buf.len = sizeof(g_device_desc);
-        break;
+        return g_device_desc;
 
     case USB_DESC_CONFIGURATION:
-        switch (target_index) {
-        case 0: // Only one configuration.
-            if (hspeed) {
-                buf.dat = g_config_desc;
-                buf.len = sizeof(g_config_desc);
-            } else {
-                buf.dat = g_other_config_desc;
-                buf.len = sizeof(g_other_config_desc);
-            }
-            break;
-        default: // Invalid configuration.
-            break;
-        }
+        if (SETUPDAT[2] == 0)
+            return usb_is_high_speed() ? g_config_desc
+                                       : g_other_config_desc;
         break;
 
     case USB_DESC_STRING:
-        switch (target_index) {
+        switch (SETUPDAT[2]) {
         case USB_DESC_LANGID_STRING_INDEX:
-            buf.dat = g_lang_id_desc;
-            buf.len = sizeof(g_lang_id_desc);
-            break;
+            return g_lang_id_desc;
         case USB_DESC_MFG_STRING_INDEX:
-            buf.dat = g_manuf_str_desc;
-            buf.len = sizeof(g_manuf_str_desc);
-            break;
+            return g_manuf_str_desc;
         case USB_DESC_PRODUCT_STRING_INDEX:
-            buf.dat = g_product_str_desc;
-            buf.len = sizeof(g_product_str_desc);
-            break;
+            return g_product_str_desc;
         case USB_DESC_SERIAL_STRING_INDEX:
-            buf.dat = g_serialno_str_desc;
-            buf.len = sizeof(g_serialno_str_desc);
-            break;
-        default: // Invalid string descriptor index.
+            return g_serialno_str_desc;
+        default:
             break;
         }
         break;
 
     case USB_DESC_DEVICE_QUALIFIER:
-        buf.dat = g_device_qual_desc;
-        buf.len = sizeof(g_device_qual_desc);
-        break;
+        return g_device_qual_desc;
 
     case USB_DESC_OTHER_SPEED_CONFIGURATION:
-        if (hspeed) {
-            buf.dat = g_other_config_desc;
-            buf.len = sizeof(g_other_config_desc);
-        } else {
-            buf.dat = g_config_desc;
-            buf.len = sizeof(g_config_desc);
-        }
-        break;
+        return usb_is_high_speed() ? g_other_config_desc
+                                   : g_config_desc;
 
-    default: // Invalid descriptor type.
+    case USB_DESC_HID:
+        return g_hid_desc;
+
+    case USB_DESC_REPORT:
+        return g_hid_report_desc;
+
+    default:
         break;
     }
 
-    return buf;
+    return NULL;
 }

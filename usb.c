@@ -50,38 +50,24 @@ void usb_init(void)
 
 void usb_task(void)
 {
-    if ((USBIRQ & bmSUDAV) != 0) {
+    if ((USBIRQ & bmSUDAV)) {
         USBIRQ = bmSUDAV;
         // Setup packet available.
         hid_ep0_setup_proc();
     }
 
-    if ((USBIRQ & bmEP0ACK) != 0) {
+    if (USBIRQ & bmEP0ACK) {
         // Status stage completed.
         USBIRQ = bmEP0ACK;
     }
 
-    if ((USBIRQ & bmURES) != 0) {
+    if ((USBIRQ & bmURES)) {
         USBIRQ = bmURES;
         // TODO: Implement reset handler.
     }
 
-    if ((USBIRQ & bmSUSP) != 0 ) {
+    if ((USBIRQ & bmSUSP)) {
         USBIRQ = bmSUSP;
-    }
-
-    if ((EPIRQ & bmEP0IN) != 0) {
-        // Host has taken a packet from the end point.
-        EPIRQ = bmEP0IN;
-        // This will arm the end point.
-        hid_ep0_in_proc();
-    }
-
-    if ((EPIRQ & bmEP0OUT) != 0) {
-        // Host has placed a packet to the end point.
-        EPIRQ = bmEP0OUT;
-        // This will arm the end point.
-        hid_ep0_out_proc();
     }
 }
 

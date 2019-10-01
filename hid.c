@@ -11,16 +11,16 @@ void hid_ep_init(void)
     EP1INCFG = bmEP_ENABLE | bmEP_INT;
     sync_delay();
     // Disable end point 2.
-    EP2CFG = (EP2CFG & ~bmEP_VALID) | bmEP_DISABLE;
+    EP2CFG = bmEP_DISABLE;
     sync_delay();
     // Disable end point 4.
-    EP4CFG = (EP4CFG & ~bmEP_VALID) | bmEP_DISABLE;
+    EP4CFG = bmEP_DISABLE;
     sync_delay();
     // Disable end point 6.
-    EP6CFG = (EP6CFG & ~bmEP_VALID) | bmEP_DISABLE;
+    EP6CFG = bmEP_DISABLE;
     sync_delay();
     // Disable end point 8.
-    EP8CFG = (EP8CFG & ~bmEP_VALID) | bmEP_DISABLE;
+    EP8CFG = bmEP_DISABLE;
     sync_delay();
 
     // Reset all FIFOs.
@@ -28,6 +28,4 @@ void hid_ep_init(void)
     sync_delay();
     FIFORESET = 0x00;
     sync_delay();
-
-    hid_ep0_init();
 }
