@@ -68,12 +68,12 @@ enum usb_setup_feature_selector {
 // Get descriptor codes.
 enum usb_setup_get_descriptor_code {
     USB_DESC_DEVICE = 0x01, // Device descriptor.
-    USB_DESC_CONFIGURATION = 0x02, // Configuration descriptor.
+    USB_DESC_CONF = 0x02, // Configuration descriptor.
     USB_DESC_STRING = 0x03, // String descriptor.
     USB_DESC_INTERFACE = 0x04, // Interface descriptor.
     USB_DESC_ENDPOINT = 0x05, // End point descriptor.
-    USB_DESC_DEVICE_QUALIFIER = 0x06, // Device qualifier descriptor.
-    USB_DESC_OTHER_SPEED_CONFIGURATION = 0x07, // Other configuration descriptor.
+    USB_DESC_DEVICE_QUAL = 0x06, // Device qualifier descriptor.
+    USB_DESC_OTHER_SPEED_CONF = 0x07, // Other configuration descriptor.
     USB_DESC_INTERFACE_POWER = 0x08, // Interface power descriptor.
     USB_DESC_OTG = 0x09, // OTG descriptor.
     USB_DESC_DEBUG = 0x0A, // Debug descriptor.

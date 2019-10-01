@@ -43,37 +43,34 @@ void usb_init(void)
 
     hid_ep_init();
 
-    // Set the RENUM to disable FX2-internal enumeration support.
+    // Disable FX2-internal enumeration support.
     USBCS |= bmRENUM;
     sync_delay();
 }
 
 void usb_task(void)
 {
-    if ((USBIRQ & bmSUDAV)) {
+    if (USBIRQ & bmSUDAV) {
         USBIRQ = bmSUDAV;
-        // Setup packet available.
         hid_ep0_setup_proc();
     }
 
     if (USBIRQ & bmEP0ACK) {
-        // Status stage completed.
         USBIRQ = bmEP0ACK;
     }
 
-    if ((USBIRQ & bmURES)) {
+    if (USBIRQ & bmURES) {
         USBIRQ = bmURES;
         // TODO: Implement reset handler.
     }
 
-    if ((USBIRQ & bmSUSP)) {
+    if (USBIRQ & bmSUSP) {
         USBIRQ = bmSUSP;
     }
 }
 
 void usb_sof_isr(void)
 {
-    // Clear interrupt request.
     EXIF &= ~bmUSBNT;
     USBIRQ = bmSOF;
 }

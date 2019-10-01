@@ -101,7 +101,7 @@ CppApplication {
         "defs.h",
         "hid.c",
         "hid.h",
-        "hiddscr.c",
+        "hiddesc.c",
         "hidep0.c",
         "irqs.h",
         "main.c",
