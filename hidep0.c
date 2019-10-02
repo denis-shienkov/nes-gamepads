@@ -31,7 +31,12 @@ static BYTE XDATA *ep_address_get(BYTE ep)
 
 static BOOL ep0_dev_status_get(void)
 {
-    EP0BUF[0] = (g_rwuen << 1) | g_selfpwr;
+    BYTE status = 0;
+    if (g_selfpwr)
+        status |= USB_STATUS_SELF_POWERED;
+    if (g_rwuen)
+        status |= USB_STATUS_REMOTE_WAKEUP;
+    EP0BUF[0] = status;
     EP0BUF[1] = 0;
     EP0BCH = 0;
     EP0BCL = 2;
@@ -84,7 +89,7 @@ static BOOL ep0_get_status_proc(void)
 
 static BOOL ep0_dev_feature_clear(void)
 {
-    if (SETUPDAT[2] == 1) {
+    if (SETUPDAT[2] == USB_FEATURE_REMOTE_WAKEUP) {
         g_rwuen = FALSE;
         return TRUE;
     }
@@ -94,7 +99,7 @@ static BOOL ep0_dev_feature_clear(void)
 
 static BOOL ep0_ep_feature_clear(void)
 {
-    if (SETUPDAT[2] == 0) {
+    if (SETUPDAT[2] == USB_FEATURE_STALL) {
         BYTE XDATA *pep = ep_address_get(SETUPDAT[4]);
         if (!pep)
             return FALSE;
@@ -139,7 +144,7 @@ static BOOL ep0_dev_feature_set(void)
 
 static BOOL ep0_ep_feature_set(void)
 {
-    if (SETUPDAT[2] == 0) {
+    if (SETUPDAT[2] == USB_FEATURE_STALL) {
         BYTE XDATA *pep = ep_address_get(SETUPDAT[4]);
         if (!pep)
             return FALSE;
@@ -167,13 +172,50 @@ static BOOL ep0_set_feature_proc(void)
 
 // Get descriptor handle.
 
-static BOOL ep0_get_descriptor_proc(void)
+static BOOL ep0_std_descriptor_proc(void)
 {
-    BYTE *pdesc = hid_ep0_desc_get();
+    BYTE XDATA *pdesc = hid_ep0_std_desc_get();
     if (pdesc) {
         SUDPTRH = usb_word_msb_get(pdesc);
         SUDPTRL = usb_word_lsb_get(pdesc);
         return TRUE;
+    }
+
+    return FALSE;
+}
+
+static BOOL ep0_report_descriptor_proc(void)
+{
+    WORD i = 0;
+    WORD length = 0;
+    BYTE XDATA *pdesc = hid_ep0_report_desc_get(&length);
+    if (pdesc) {
+        AUTOPTRH1 = usb_word_msb_get(pdesc);
+        AUTOPTRL1 = usb_word_lsb_get(pdesc);
+
+        for (i = 0; i < length; ++i)
+           EP0BUF[i] = XAUTODAT1;
+
+        EP0BCH = usb_word_msb_get(length);
+        EP0BCL = usb_word_lsb_get(length);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static BOOL ep0_get_descriptor_proc(void)
+{
+    switch (SETUPDAT[3]) {
+    case USB_DESC_DEVICE:
+    case USB_DESC_CONF:
+    case USB_DESC_STRING:
+    case USB_DESC_DEVICE_QUAL:
+    case USB_DESC_OTHER_SPEED_CONF:
+    case USB_DESC_HID:
+        return ep0_std_descriptor_proc();
+    case USB_DESC_REPORT:
+        return ep0_report_descriptor_proc();
     }
 
     return FALSE;

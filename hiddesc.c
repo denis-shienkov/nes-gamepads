@@ -47,7 +47,7 @@ enum usb_descr_length {
 
 enum usb_descr_attributes {
     // Attributes (b7 - buspwr, b6 - selfpwr, b5 - rwu).
-    USB_DESC_ATTRIBUTES = 0xC0,
+    USB_DESC_ATTRIBUTES = 0xA0,
     // 100 mA (div 2).
     USB_DESC_POWER_CONSUMPTION = 50
 };
@@ -160,7 +160,7 @@ g_config_desc[USB_DESC_CONF_TOTAL_LEN] = {
     0x01, // Number of HID class descriptors to follow.
     USB_DESC_REPORT, // Repord descriptor type (HID).
     usb_word_lsb_get(USB_DESCR_HID_REP_LEN), // Report descriptor total length, lo.
-    usb_word_lsb_get(USB_DESCR_HID_REP_LEN), // Report descriptor total length, hi.
+    usb_word_msb_get(USB_DESCR_HID_REP_LEN), // Report descriptor total length, hi.
 
     // End point descriptor.
     USB_DESC_ENDPOINT_LEN, // Descriptor length.
@@ -168,7 +168,7 @@ g_config_desc[USB_DESC_CONF_TOTAL_LEN] = {
     HID_EP_IN, // End point address (ep1 in).
     0x03, // End point type (interrupt).
     usb_word_lsb_get(MAX_EP1_SIZE), // Maximum packet size, lo (ep1 size).
-    usb_word_lsb_get(MAX_EP1_SIZE), // Maximum packet size, hi (ep1 size).
+    usb_word_msb_get(MAX_EP1_SIZE), // Maximum packet size, hi (ep1 size).
     0x01 // Polling interval (1 ms).
 };
 
@@ -206,72 +206,89 @@ g_lang_id_desc[] = {
 
 static const BYTE CODE
 g_manuf_str_desc[] = {
-    0x0E, // Descriptor length.
+    0x18, // Descriptor length.
     USB_DESC_STRING, // Descriptor type.
-    'Q', 'B', 'S', ' ', 'e', 'x', 'a', 'm', 'p', 'l', 'e',
-    0x00
+    // Unicode string:
+    'Q', 0, 'B', 0, 'S', 0, ' ', 0,
+    'e', 0, 'x', 0, 'a', 0, 'm', 0, 'p', 0, 'l', 0, 'e', 0
 };
 
 static const BYTE CODE
 g_product_str_desc[] = {
-    0x0F, // Descriptor length.
+    0x1A, // Descriptor length.
     USB_DESC_STRING, // Descriptor type.
-    'N', 'E', 'S', ' ', 'G', 'a', 'm', 'e', 'P', 'a', 'd', 's',
-    0x00
+    // Unicode string:
+    'N', 0, 'E', 0, 'S', 0, ' ', 0,
+    'G', 0, 'a', 0, 'm', 0, 'e', 0,
+    'P', 0, 'a', 0, 'd', 0, 's', 0
 };
 
 static const BYTE CODE
 g_serialno_str_desc[] = {
-    0x0F, // Descriptor length.
+    0x1A, // Descriptor length.
     USB_DESC_STRING, // Descriptor type.
-    '0' ,'1', '0', '2' , '0', '3', '0', '4', '0', '5', '0', '6',
-    0x00
+    // Unicode string:
+    '0', 0 ,'1', 0, '0', 0, '2', 0, '0', 0, '3', 0,
+    '0', 0, '4', 0, '0', 0, '5', 0, '0', 0, '6', 0
 };
 
-BYTE *hid_ep0_desc_get(void)
+static BYTE *ep0_string_desc_get(void)
 {
-    switch (SETUPDAT[3]) {
-
-    case USB_DESC_DEVICE:
-        return g_device_desc;
-
-    case USB_DESC_CONF:
-        if (SETUPDAT[2] == 0)
-            return usb_is_high_speed() ? g_config_desc
-                                       : g_other_config_desc;
-        break;
-
-    case USB_DESC_STRING:
-        switch (SETUPDAT[2]) {
-        case USB_DESC_LANGID_STRING_INDEX:
-            return g_lang_id_desc;
-        case USB_DESC_MFG_STRING_INDEX:
-            return g_manuf_str_desc;
-        case USB_DESC_PRODUCT_STRING_INDEX:
-            return g_product_str_desc;
-        case USB_DESC_SERIAL_STRING_INDEX:
-            return g_serialno_str_desc;
-        default:
-            break;
-        }
-        break;
-
-    case USB_DESC_DEVICE_QUAL:
-        return g_device_qual_desc;
-
-    case USB_DESC_OTHER_SPEED_CONF:
-        return usb_is_high_speed() ? g_other_config_desc
-                                   : g_config_desc;
-
-    case USB_DESC_HID:
-        return &g_config_desc[USB_DESC_CONF_LEN + USB_DESC_INTERFACE_LEN];
-
-    case USB_DESC_REPORT:
-        return g_hid_report_desc;
-
+    switch (SETUPDAT[2]) {
+    case USB_DESC_LANGID_STRING_INDEX:
+        return g_lang_id_desc;
+    case USB_DESC_MFG_STRING_INDEX:
+        return g_manuf_str_desc;
+    case USB_DESC_PRODUCT_STRING_INDEX:
+        return g_product_str_desc;
+    case USB_DESC_SERIAL_STRING_INDEX:
+        return g_serialno_str_desc;
     default:
         break;
     }
 
     return NULL;
+}
+
+static BYTE *ep0_config_desc_get(BOOL other)
+{
+    if (!other) {
+        if (SETUPDAT[2] == 0) {
+            return usb_is_high_speed() ? g_config_desc
+                                       : g_other_config_desc;
+        }
+    } else {
+        return usb_is_high_speed() ? g_other_config_desc
+                                   : g_config_desc;
+    }
+
+    return NULL;
+}
+
+BYTE *hid_ep0_std_desc_get(void)
+{
+    switch (SETUPDAT[3]) {
+    case USB_DESC_DEVICE:
+        return g_device_desc;
+    case USB_DESC_CONF:
+        return ep0_config_desc_get(FALSE);
+    case USB_DESC_STRING:
+        return ep0_string_desc_get();
+    case USB_DESC_DEVICE_QUAL:
+        return g_device_qual_desc;
+    case USB_DESC_OTHER_SPEED_CONF:
+        return ep0_config_desc_get(TRUE);
+    case USB_DESC_HID:
+        return &g_config_desc[USB_DESC_CONF_LEN + USB_DESC_INTERFACE_LEN];
+    default:
+        break;
+    }
+
+    return NULL;
+}
+
+BYTE *hid_ep0_report_desc_get(WORD *length)
+{
+    *length = sizeof(g_hid_report_desc);
+    return g_hid_report_desc;
 }

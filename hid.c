@@ -28,6 +28,9 @@ void hid_init(void)
     sync_delay();
     FIFORESET = 0x00;
     sync_delay();
+
+    // Enable dual autopointer(s).
+    AUTOPTRSETUP |= bmAPTREN;
 }
 
 void hid_reset(void)

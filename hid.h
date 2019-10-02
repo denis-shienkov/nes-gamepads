@@ -19,7 +19,9 @@ void hid_reset(void);
 
 void hid_ep0_init(void);
 void hid_ep0_setup_proc(void);
-BYTE *hid_ep0_desc_get(void);
+
+BYTE *hid_ep0_std_desc_get(void);
+BYTE *hid_ep0_report_desc_get(WORD *length);
 
 #ifdef __cplusplus
 }
