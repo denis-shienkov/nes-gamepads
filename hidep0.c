@@ -311,7 +311,7 @@ static BOOL ep0_setup(void)
     return FALSE;
 }
 
-void hid_ep0_setup_proc(void)
+void hid_ep0_setup_task(void)
 {
     if (!ep0_setup())
         usb_ep0_stall();

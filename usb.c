@@ -52,7 +52,7 @@ void usb_task(void)
 {
     if (USBIRQ & bmSUDAV) {
         USBIRQ = bmSUDAV;
-        hid_ep0_setup_proc();
+        hid_ep0_setup_task();
     }
 
     if (USBIRQ & bmEP0ACK) {
@@ -61,12 +61,13 @@ void usb_task(void)
 
     if (USBIRQ & bmURES) {
         USBIRQ = bmURES;
-        hid_reset();
     }
 
     if (USBIRQ & bmSUSP) {
         USBIRQ = bmSUSP;
     }
+
+    hid_ep1_task();
 }
 
 void usb_sof_isr(void)

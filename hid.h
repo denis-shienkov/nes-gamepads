@@ -14,14 +14,23 @@ enum hid_constants {
     HID_EP_IN = 0x81 // Active end point address.
 };
 
+struct hid_report {
+    const BYTE id;
+    BYTE buttons;
+};
+
+enum { HID_REPORTS_COUNT = 2 };
+
 void hid_init(void);
-void hid_reset(void);
 
 void hid_ep0_init(void);
-void hid_ep0_setup_proc(void);
+void hid_ep0_setup_task(void);
 
 BYTE *hid_ep0_std_desc_get(void);
 BYTE *hid_ep0_report_desc_get(WORD *length);
+
+void hid_ep1_task(void);
+void hid_ep1_report_update(BYTE index, BYTE buttons);
 
 #ifdef __cplusplus
 }

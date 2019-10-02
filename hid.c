@@ -32,8 +32,3 @@ void hid_init(void)
     // Enable dual autopointer(s).
     AUTOPTRSETUP |= bmAPTREN;
 }
-
-void hid_reset(void)
-{
-    // Implement me.
-}
