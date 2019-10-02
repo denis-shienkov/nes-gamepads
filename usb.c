@@ -41,7 +41,7 @@ void usb_init(void)
     USBCS |= bmNOSYNSOF;
     sync_delay();
 
-    hid_ep_init();
+    hid_init();
 
     // Disable FX2-internal enumeration support.
     USBCS |= bmRENUM;
@@ -61,7 +61,7 @@ void usb_task(void)
 
     if (USBIRQ & bmURES) {
         USBIRQ = bmURES;
-        // TODO: Implement reset handler.
+        hid_reset();
     }
 
     if (USBIRQ & bmSUSP) {
@@ -77,5 +77,4 @@ void usb_sof_isr(void)
 
 void usb_stub_isr(void)
 {
-
 }

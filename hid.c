@@ -2,7 +2,7 @@
 #include "core.h"
 #include "usb.h"
 
-void hid_ep_init(void)
+void hid_init(void)
 {
     // Disable end point 1 output.
     EP1OUTCFG = (EP1OUTCFG & ~bmEP_VALID) | bmEP_DISABLE;
@@ -28,4 +28,9 @@ void hid_ep_init(void)
     sync_delay();
     FIFORESET = 0x00;
     sync_delay();
+}
+
+void hid_reset(void)
+{
+    // Implement me.
 }

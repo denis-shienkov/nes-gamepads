@@ -5,6 +5,14 @@
 static BOOL g_rwuen = FALSE;
 static BOOL g_selfpwr = FALSE;
 
+static void ep0_ep1in_reset(void)
+{
+    EP1INCS &= ~bmEPBUSY;
+    sync_delay();
+    usp_ep_reset_toggle(HID_EP_IN);
+    sync_delay();
+}
+
 // Get status handle.
 
 static BYTE XDATA *ep_address_get(BYTE ep)
@@ -132,8 +140,6 @@ static BOOL ep0_dev_feature_set(void)
 static BOOL ep0_ep_feature_set(void)
 {
     if (SETUPDAT[2] == 0) {
-        // set TRM 2.3.2
-        // stall and endpoint
         BYTE XDATA *pep = ep_address_get(SETUPDAT[4]);
         if (!pep)
             return FALSE;
@@ -173,6 +179,55 @@ static BOOL ep0_get_descriptor_proc(void)
     return FALSE;
 }
 
+// Get configuration handle.
+
+static BOOL ep0_get_config_proc(void)
+{
+    // We only support configuration 1.
+    EP0BUF[0] = HID_CONFIG_NUMBER;
+    EP0BCH = 0;
+    EP0BCL = 1;
+    return TRUE;
+}
+
+// Set configuration handle.
+
+static BOOL ep0_set_config_proc(void)
+{
+    // We only support configuration 1.
+    if (SETUPDAT[2] != HID_CONFIG_NUMBER)
+        return FALSE;
+
+    return TRUE;
+}
+
+// Get interface handle.
+
+static BOOL ep0_get_iface_proc(void)
+{
+    if (SETUPDAT[4] != HID_IFACE_NUMBER)
+        return FALSE;
+
+    EP0BUF[0] = HID_ALT_IFACE_NUMBER;
+    EP0BCH = 0;
+    EP0BCL = 1;
+    return TRUE;
+}
+
+// Set interface handle.
+
+static BOOL ep0_set_iface_proc(void)
+{
+    if (SETUPDAT[4] != HID_IFACE_NUMBER)
+        return FALSE;
+
+    if (SETUPDAT[2] != HID_ALT_IFACE_NUMBER)
+        return FALSE;
+
+    ep0_ep1in_reset();
+    return TRUE;
+}
+
 static BOOL ep0_std_proc(void)
 {
     switch (SETUPDAT[1]) {
@@ -187,6 +242,14 @@ static BOOL ep0_std_proc(void)
         return TRUE;
     case USB_SETUP_GET_DESCRIPTOR:
         return ep0_get_descriptor_proc();
+    case USB_SETUP_GET_CONFIGURATION:
+        return ep0_get_config_proc();
+    case USB_SETUP_SET_CONFIGURATION:
+        return ep0_set_config_proc();
+    case USB_SETUP_GET_INTERFACE:
+        return ep0_get_iface_proc();
+    case USB_SETUP_SET_INTERFACE:
+        return ep0_set_iface_proc();
     default:
         break;
     }

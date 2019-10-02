@@ -7,7 +7,15 @@
 extern "C" {
 #endif
 
-void hid_ep_init(void);
+enum hid_constants {
+    HID_CONFIG_NUMBER = 1, // Number of valid configuration.
+    HID_IFACE_NUMBER = 0, // Number of valid interface.
+    HID_ALT_IFACE_NUMBER = 0, // Number of valid alternate interface.
+    HID_EP_IN = 0x81 // Active end point address.
+};
+
+void hid_init(void);
+void hid_reset(void);
 
 void hid_ep0_init(void);
 void hid_ep0_setup_proc(void);

@@ -1,4 +1,4 @@
-#include "usb.h"
+#include "hid.h"
 
 enum usb_bcd_version {
     USB_SPEC_BCD_VERSION = 0x0200,
@@ -46,8 +46,14 @@ enum usb_descr_length {
 };
 
 enum usb_descr_attributes {
-    USB_DESC_ATTRIBUTES = 0xC0, // Attributes (b7 - buspwr, b6 - selfpwr, b5 - rwu).
-    USB_DESC_POWER_CONSUMPTION = 50 // 100 mA (div 2).
+    // Attributes (b7 - buspwr, b6 - selfpwr, b5 - rwu).
+    USB_DESC_ATTRIBUTES = 0xC0,
+    // 100 mA (div 2).
+    USB_DESC_POWER_CONSUMPTION = 50
+};
+
+enum usb_descr_numbers {
+    USB_DESC_CONFIG_COUNT = 1
 };
 
 static const BYTE CODE
@@ -105,7 +111,7 @@ g_device_desc[USB_DESC_DEVICE_TOTAL_LEN] = {
     USB_DESC_MFG_STRING_INDEX,
     USB_DESC_PRODUCT_STRING_INDEX,
     USB_DESC_SERIAL_STRING_INDEX,
-    0x01 // Configurations number.
+    USB_DESC_CONFIG_COUNT // Configurations count.
 };
 
 static const BYTE CODE
@@ -118,8 +124,8 @@ g_device_qual_desc[USB_DESC_DEVICE_QUAL_TOTAL_LEN] = {
     0x00, // Device sub-class.
     0x00, // Device protocol.
     MAX_EP0_SIZE, // Maximum packet size (ep0 size).
-    0x01, // Configurations number.
-    0x00 // Reserved
+    USB_DESC_CONFIG_COUNT, // Configurations count.
+    0x00 // Reserved.
 };
 
 static const BYTE CODE
@@ -128,8 +134,8 @@ g_config_desc[USB_DESC_CONF_TOTAL_LEN] = {
     USB_DESC_CONF, // Descriptor type.
     usb_word_lsb_get(USB_DESC_CONF_TOTAL_LEN), // Total length, lo.
     usb_word_msb_get(USB_DESC_CONF_TOTAL_LEN), // Total length, hi.
-    0x01, // Interfaces number.
-    0x01, // Configuration number.
+    0x01, // Interfaces count.
+    HID_CONFIG_NUMBER, // Configuration number.
     0x00, // Configuration string index.
     USB_DESC_ATTRIBUTES, // Attributes.
     USB_DESC_POWER_CONSUMPTION, // Power consumption.
@@ -137,9 +143,9 @@ g_config_desc[USB_DESC_CONF_TOTAL_LEN] = {
     // Interface descriptor.
     USB_DESC_INTERFACE_LEN, // Descriptor length.
     USB_DESC_INTERFACE, // Descriptor type.
-    0x00, // Zero-based index of this interfacce.
-    0x00, // Alternate setting.
-    0x01, // End points number (ep0 + ep1 in).
+    HID_IFACE_NUMBER, // Zero-based index of this interfacce.
+    HID_ALT_IFACE_NUMBER, // Alternate setting.
+    0x01, // End points count (ep1 in).
     0x03, // Class code (HID).
     0x00, // Subclass code (boot).
     0x00, // Protocol code (none).
@@ -159,7 +165,7 @@ g_config_desc[USB_DESC_CONF_TOTAL_LEN] = {
     // End point descriptor.
     USB_DESC_ENDPOINT_LEN, // Descriptor length.
     USB_DESC_ENDPOINT, // Descriptor type.
-    0x81, // End point address (ep1 in).
+    HID_EP_IN, // End point address (ep1 in).
     0x03, // End point type (interrupt).
     usb_word_lsb_get(MAX_EP1_SIZE), // Maximum packet size, lo (ep1 size).
     usb_word_lsb_get(MAX_EP1_SIZE), // Maximum packet size, hi (ep1 size).
