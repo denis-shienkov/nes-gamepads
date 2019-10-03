@@ -18,9 +18,6 @@ void core_init(void)
     // Set CPU clock to 48MHz.
     cpu_freq_clk_set(CPU_CLK_48M);
     sync_delay();
-    // Set interface to ports.
-    IFCONFIG = (IFCONFIG & (~bmIFCFG)) | bmIFPORTS;
-    sync_delay();
     // Set stretch to 0.
     CKCON = ((CKCON & (~bmSTRETCH)) | bmFW_STRETCH1);
     sync_delay();

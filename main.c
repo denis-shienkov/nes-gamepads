@@ -3,7 +3,7 @@
 #include "regs.h"
 
 #include "core.h"
-#include "irqs.h"
+#include "gpio.h"
 #include "usb.h"
 
 static void hw_init(void)
@@ -13,6 +13,7 @@ static void hw_init(void)
     code_all_irq_disable();
 
     core_init();
+    gpio_init();
     usb_init();
 
     usb_connect();
@@ -22,6 +23,7 @@ static void hw_init(void)
 static void hw_loop_exec(void)
 {
     while (TRUE) {
+        gpio_task();
         usb_task();
     }
 }

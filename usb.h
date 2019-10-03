@@ -129,10 +129,6 @@ struct ep0_buf {
 #define usb_disconnect() (USBCS |= bmDISCON)
 #define usb_connect() (USBCS &= ~bmDISCON)
 
-#define usb_is_ext_wakeup() \
-    (((WAKEUPCS & bmWU2) && (WAKEUPCS & bmWU2EN)) \
-    || ((WAKEUPCS & bmWU) && (WAKEUPCS & bmWUEN)))
-
 #define usb_is_high_speed() \
     (USBCS & bmHSM)
 

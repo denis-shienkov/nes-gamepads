@@ -5,7 +5,7 @@
 void hid_init(void)
 {
     // Disable end point 1 output.
-    EP1OUTCFG = (EP1OUTCFG & ~bmEP_VALID) | bmEP_DISABLE;
+    EP1OUTCFG = bmEP_DISABLE;
     sync_delay();
     // Enable end point 1 input in interrupt mode.
     EP1INCFG = bmEP_ENABLE | bmEP_INT;

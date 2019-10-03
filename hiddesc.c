@@ -63,7 +63,7 @@ g_hid_report_desc[USB_DESCR_HID_REP_LEN] = {
     0x09, 0x05, // Usage (Game Pad).
     0xa1, 0x01, // Collection (Application).
     0xa1, 0x00, //   Collection (Physical).
-    0x85, 0x01, //     Report id (1).
+    0x85, HID_REPORT_ID_GAMEPAD1, // Report id (1).
     0x05, 0x09, //     Usage page (Button).
     0x19, 0x01, //     Usage minimum (Button 1).
     0x29, 0x08, //     Usage maximum (Button 8).
@@ -79,7 +79,7 @@ g_hid_report_desc[USB_DESCR_HID_REP_LEN] = {
     0x09, 0x05, // Usage (Game Pad).
     0xa1, 0x01, // Collection (Application).
     0xa1, 0x00, //   Collection (Physical).
-    0x85, 0x02, //     Report id (2).
+    0x85, HID_REPORT_ID_GAMEPAD2, // Report id (2).
     0x05, 0x09, //     Usage page (Button).
     0x19, 0x01, //     Usage minimum (Button 1).
     0x29, 0x08, //     Usage maximum (Button 8).
@@ -89,7 +89,7 @@ g_hid_report_desc[USB_DESCR_HID_REP_LEN] = {
     0x75, 0x01, //     Report size (1).
     0x81, 0x02, //     Input (Data,Var,Abs).
     0xc0,       //   End collection
-    0xC0        // End collection.
+    0xc0        // End collection.
 };
 
 static const BYTE CODE

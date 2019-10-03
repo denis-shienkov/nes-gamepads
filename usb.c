@@ -17,7 +17,7 @@ void usb_init(void)
     USBERRIE = 0;
     sync_delay();
     // Enable USB interrupt 2 autovectoring.
-    INTSETUP |= bmAV2EN;
+    INTSETUP = bmAV2EN;
     sync_delay();
     // Clear USB interrupt requests.
     USBIRQ = bmSUDAV | bmSOF | bmSUTOK | bmSUSP

@@ -99,6 +99,8 @@ CppApplication {
         "core.c",
         "core.h",
         "defs.h",
+        "gpio.c",
+        "gpio.h",
         "hid.c",
         "hid.h",
         "hiddesc.c",

@@ -14,9 +14,9 @@ enum hid_constants {
     HID_EP_IN = 0x81 // Active end point address.
 };
 
-struct hid_report {
-    const BYTE id;
-    BYTE buttons;
+enum hid_gamepad_id {
+    HID_REPORT_ID_GAMEPAD1 = 1,
+    HID_REPORT_ID_GAMEPAD2 = 2
 };
 
 enum { HID_REPORTS_COUNT = 2 };
