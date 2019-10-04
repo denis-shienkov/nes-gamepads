@@ -174,7 +174,7 @@ static BOOL ep0_set_feature_proc(void)
 
 static BOOL ep0_std_descriptor_proc(void)
 {
-    BYTE XDATA *pdesc = hid_ep0_std_desc_get();
+    BYTE XDATA *pdesc = (BYTE XDATA *)hid_ep0_std_desc_get();
     if (pdesc) {
         SUDPTRH = usb_word_msb_get(pdesc);
         SUDPTRL = usb_word_lsb_get(pdesc);
@@ -188,7 +188,7 @@ static BOOL ep0_report_descriptor_proc(void)
 {
     WORD i = 0;
     WORD length = 0;
-    BYTE XDATA *pdesc = hid_ep0_report_desc_get(&length);
+    BYTE XDATA *pdesc = (BYTE XDATA *)hid_ep0_report_desc_get(&length);
     if (pdesc) {
         AUTOPTRH1 = usb_word_msb_get(pdesc);
         AUTOPTRL1 = usb_word_lsb_get(pdesc);

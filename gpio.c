@@ -22,8 +22,8 @@ static struct {
     const BYTE pin;
     BYTE buttons;
 } g_reports[HID_REPORTS_COUNT] = {
-    GPIO_DATA1_PIN, 0,
-    GPIO_DATA2_PIN, 0
+    {GPIO_DATA1_PIN, 0},
+    {GPIO_DATA2_PIN, 0}
 };
 
 // Pulse width around ~1 usec.

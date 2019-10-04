@@ -7,8 +7,8 @@ struct hid_report {
 };
 
 static struct hid_report g_reports[HID_REPORTS_COUNT] = {
-    HID_REPORT_ID_GAMEPAD1, 0, FALSE,
-    HID_REPORT_ID_GAMEPAD2, 0, FALSE
+    {HID_REPORT_ID_GAMEPAD1, 0, FALSE},
+    {HID_REPORT_ID_GAMEPAD2, 0, FALSE}
 };
 
 static void ep1_report_send(BYTE index)
