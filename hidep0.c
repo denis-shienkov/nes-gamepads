@@ -15,14 +15,16 @@ static void ep0_ep1in_reset(void)
 
 // Get status handle.
 
-static BYTE XDATA *ep_address_get(BYTE ep)
+static BYTE *ep_address_get(BYTE ep)
 {
     const BYTE ep_num = ep & ~bmSETUP_DIR;
     switch (ep_num) {
     case 0:
-        return &EP0CS;
+        return (BYTE *)&EP0CS;
     case 1:
-        return ep & bmSETUP_DIR ? &EP1INCS : &EP1OUTCS;
+        return (ep & bmSETUP_DIR)
+                ? (BYTE *)&EP1INCS
+                : (BYTE *)&EP1OUTCS;
     default:
         break;
     }
@@ -54,7 +56,8 @@ static BOOL ep0_iface_status_get(void)
 
 static BOOL ep0_ep_status_get(void)
 {
-    const BYTE XDATA *pep = ep_address_get(SETUPDAT[4]);
+    const volatile BYTE XDATA *pep =
+            (BYTE XDATA *)ep_address_get(SETUPDAT[4]);
     if (pep) {
         EP0BUF[0] = *pep & bmEPSTALL ? 1 : 0;
         EP0BUF[1] = 0;
@@ -100,7 +103,8 @@ static BOOL ep0_dev_feature_clear(void)
 static BOOL ep0_ep_feature_clear(void)
 {
     if (SETUPDAT[2] == USB_FEATURE_STALL) {
-        BYTE XDATA *pep = ep_address_get(SETUPDAT[4]);
+        volatile BYTE XDATA *pep =
+                (BYTE XDATA *)ep_address_get(SETUPDAT[4]);
         if (!pep)
             return FALSE;
         *pep &= ~bmEPSTALL;
@@ -145,7 +149,8 @@ static BOOL ep0_dev_feature_set(void)
 static BOOL ep0_ep_feature_set(void)
 {
     if (SETUPDAT[2] == USB_FEATURE_STALL) {
-        BYTE XDATA *pep = ep_address_get(SETUPDAT[4]);
+        volatile BYTE XDATA *pep =
+                (BYTE XDATA *)ep_address_get(SETUPDAT[4]);
         if (!pep)
             return FALSE;
         *pep |= bmEPSTALL;
@@ -174,7 +179,8 @@ static BOOL ep0_set_feature_proc(void)
 
 static BOOL ep0_std_descriptor_proc(void)
 {
-    BYTE XDATA *pdesc = (BYTE XDATA *)hid_ep0_std_desc_get();
+    BYTE XDATA *pdesc =
+            (BYTE XDATA *)hid_ep0_std_desc_get();
     if (pdesc) {
         SUDPTRH = usb_word_msb_get(pdesc);
         SUDPTRL = usb_word_lsb_get(pdesc);
@@ -188,7 +194,8 @@ static BOOL ep0_report_descriptor_proc(void)
 {
     WORD i = 0;
     WORD length = 0;
-    BYTE XDATA *pdesc = (BYTE XDATA *)hid_ep0_report_desc_get(&length);
+    BYTE XDATA *pdesc =
+            (BYTE XDATA *)hid_ep0_report_desc_get(&length);
     if (pdesc) {
         AUTOPTRH1 = usb_word_msb_get(pdesc);
         AUTOPTRL1 = usb_word_lsb_get(pdesc);

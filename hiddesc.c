@@ -236,13 +236,13 @@ static BYTE *ep0_string_desc_get(void)
 {
     switch (SETUPDAT[2]) {
     case USB_DESC_LANGID_STRING_INDEX:
-        return g_lang_id_desc;
+        return (BYTE *)g_lang_id_desc;
     case USB_DESC_MFG_STRING_INDEX:
-        return g_manuf_str_desc;
+        return (BYTE *)g_manuf_str_desc;
     case USB_DESC_PRODUCT_STRING_INDEX:
-        return g_product_str_desc;
+        return (BYTE *)g_product_str_desc;
     case USB_DESC_SERIAL_STRING_INDEX:
-        return g_serialno_str_desc;
+        return (BYTE *)g_serialno_str_desc;
     default:
         break;
     }
@@ -254,12 +254,12 @@ static BYTE *ep0_config_desc_get(BOOL other)
 {
     if (!other) {
         if (SETUPDAT[2] == 0) {
-            return usb_is_high_speed() ? g_config_desc
-                                       : g_other_config_desc;
+            return usb_is_high_speed() ? (BYTE *)g_config_desc
+                                       : (BYTE *)g_other_config_desc;
         }
     } else {
-        return usb_is_high_speed() ? g_other_config_desc
-                                   : g_config_desc;
+        return usb_is_high_speed() ? (BYTE *)g_other_config_desc
+                                   : (BYTE *)g_config_desc;
     }
 
     return NULL;
@@ -269,17 +269,18 @@ BYTE *hid_ep0_std_desc_get(void)
 {
     switch (SETUPDAT[3]) {
     case USB_DESC_DEVICE:
-        return g_device_desc;
+        return (BYTE *)g_device_desc;
     case USB_DESC_CONF:
-        return ep0_config_desc_get(FALSE);
+        return (BYTE *)ep0_config_desc_get(FALSE);
     case USB_DESC_STRING:
-        return ep0_string_desc_get();
+        return (BYTE *)ep0_string_desc_get();
     case USB_DESC_DEVICE_QUAL:
-        return g_device_qual_desc;
+        return (BYTE *)g_device_qual_desc;
     case USB_DESC_OTHER_SPEED_CONF:
-        return ep0_config_desc_get(TRUE);
+        return (BYTE *)ep0_config_desc_get(TRUE);
     case USB_DESC_HID:
-        return &g_config_desc[USB_DESC_CONF_LEN + USB_DESC_INTERFACE_LEN];
+        return (BYTE *)&g_config_desc[USB_DESC_CONF_LEN
+                + USB_DESC_INTERFACE_LEN];
     default:
         break;
     }
@@ -290,5 +291,5 @@ BYTE *hid_ep0_std_desc_get(void)
 BYTE *hid_ep0_report_desc_get(WORD *length)
 {
     *length = sizeof(g_hid_report_desc);
-    return g_hid_report_desc;
+    return (BYTE *)g_hid_report_desc;
 }
