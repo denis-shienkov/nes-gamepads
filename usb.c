@@ -4,6 +4,7 @@
 
 void usb_init(void)
 {
+    sync_delay();
     // Disable all USB interrupts.
     USBIE = 0;
     sync_delay();

@@ -31,4 +31,5 @@ void hid_init(void)
 
     // Enable dual autopointer(s).
     AUTOPTRSETUP |= bmAPTREN;
+    sync_delay();
 }
