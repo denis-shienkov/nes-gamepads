@@ -69,7 +69,7 @@ g_hid_report_desc[USB_DESCR_HID_REP_LEN] = {
     0x29, 0x08, //     Usage maximum (Button 8).
     0x15, 0x00, //     Logical minimum (0).
     0x25, 0x01, //     Logical maximum (1).
-    0x95, 0x08, //     Report count (8).
+    0x95, HID_REPORT_BITS_COUNT, // Report count (8).
     0x75, 0x01, //     Report size (1).
     0x81, 0x02, //     Input (Data,Var,Abs).
     0xc0,       //   End collection.
@@ -85,7 +85,7 @@ g_hid_report_desc[USB_DESCR_HID_REP_LEN] = {
     0x29, 0x08, //     Usage maximum (Button 8).
     0x15, 0x00, //     Logical minimum (0).
     0x25, 0x01, //     Logical maximum (1).
-    0x95, 0x08, //     Report count (8).
+    0x95, HID_REPORT_BITS_COUNT, // Report count (8).
     0x75, 0x01, //     Report size (1).
     0x81, 0x02, //     Input (Data,Var,Abs).
     0xc0,       //   End collection

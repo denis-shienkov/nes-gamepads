@@ -19,7 +19,10 @@ enum hid_gamepad_id {
     HID_REPORT_ID_GAMEPAD2 = 2
 };
 
-enum { HID_REPORTS_COUNT = 2 };
+enum {
+    HID_REPORTS_COUNT = 2,
+    HID_REPORT_BITS_COUNT = 8
+};
 
 void hid_init(void);
 
