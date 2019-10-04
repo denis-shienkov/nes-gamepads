@@ -4,7 +4,6 @@
 
 void usb_init(void)
 {
-    sync_delay();
     // Disable all USB interrupts.
     USBIE = 0;
     sync_delay();
@@ -17,8 +16,8 @@ void usb_init(void)
     // Disable all USB error interrupts.
     USBERRIE = 0;
     sync_delay();
-    // Enable USB interrupt 2 autovectoring.
-    INTSETUP = bmAV2EN;
+    // Disable USB && GPIF autovectoring.
+    INTSETUP = 0;
     sync_delay();
     // Clear USB interrupt requests.
     USBIRQ = bmSUDAV | bmSOF | bmSUTOK | bmSUSP
@@ -27,9 +26,6 @@ void usb_init(void)
     // Clear end point interrupt requests.
     EPIRQ = bmEP0IN | bmEP0OUT | bmEP1IN | bmEP1OUT
             | bmEP2 | bmEP4 | bmEP6 | bmEP8;
-    sync_delay();
-    // Handle only SOF interrupt directly.
-    USBIE = bmSOF;
     sync_delay();
     // Set USB interrupt to high priority.
     PUSB = 1;
@@ -69,14 +65,4 @@ void usb_task(void)
     }
 
     hid_ep1_task();
-}
-
-void usb_sof_isr(void)
-{
-    EXIF &= ~bmUSBNT;
-    USBIRQ = bmSOF;
-}
-
-void usb_stub_isr(void)
-{
 }

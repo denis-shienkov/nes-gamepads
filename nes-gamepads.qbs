@@ -39,15 +39,6 @@ CppApplication {
         files: ["lnk51ew_CY7C68013A.xcl"]
     }
 
-    Group {
-        name: "Iar Autovec"
-        condition: qbs.toolchain.contains("iar")
-        fileTags: ["asm"]
-        files: [
-            "autovec_iar.s51",
-        ]
-    }
-
     //
     // KEIL-specific properties and sources.
     //
@@ -56,17 +47,8 @@ CppApplication {
         condition: qbs.toolchain.contains("keil")
         cpp.driverLinkerFlags: [
             "RAMSIZE(256)",
-            "CODE(0x0100-0x0FFF)",
-            "XDATA(0x1000-0x1FFF)"
-        ]
-    }
-
-    Group {
-        name: "Keil Autovec"
-        condition: qbs.toolchain.contains("keil")
-        fileTags: ["asm"]
-        files: [
-            "autovec_keil.a51",
+            "CODE(0x80)",
+            "XDATA(0x1000)"
         ]
     }
 
@@ -77,17 +59,8 @@ CppApplication {
     Properties {
         condition: qbs.toolchain.contains("sdcc")
         cpp.driverLinkerFlags: [
-            "--code-loc", "0x0100",
+            "--code-loc", "0x80",
             "--xram-loc", "0x1000"
-        ]
-    }
-
-    Group {
-        name: "Sdcc Autovec"
-        condition: qbs.toolchain.contains("sdcc")
-        fileTags: ["asm"]
-        files: [
-            "autovec_sdcc.a51",
         ]
     }
 
