@@ -240,7 +240,6 @@ extern "C" {
 #define code_all_irq_enable() (IE = 1)
 
 void core_init(void);
-void core_delay(WORD msec);
 
 #ifdef __cplusplus
 }

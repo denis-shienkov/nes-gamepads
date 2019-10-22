@@ -34,17 +34,3 @@ void core_init(void)
     EXIF = 0;
     sync_delay();
 }
-
-void core_delay(WORD msecs)
-{
-    const WORD clk = cpu_freq_clk_get();
-    const WORD loop_count = (clk == CPU_CLK_12M)
-            ? 177 : (clk == CPU_CLK_24M)
-              ? 353 : 706;
-
-    do {
-        volatile WORD count = loop_count;
-        do {
-        } while (--count);
-    } while (--msecs);
-}

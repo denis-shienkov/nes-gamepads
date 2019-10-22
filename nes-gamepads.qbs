@@ -32,7 +32,7 @@ CppApplication {
     }
 
     Group {
-        name: "Iar Linker Script"
+        name: "IAR Linker Script"
         condition: qbs.toolchain.contains("iar")
         prefix: cpp.toolchainInstallPath + "/../config/devices/cypress/"
         fileTags: ["linkerscript"]

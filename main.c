@@ -9,7 +9,6 @@
 static void hw_init(void)
 {
     usb_disconnect();
-    core_delay(500);
     code_all_irq_disable();
 
     core_init();
