@@ -2,21 +2,18 @@
 #define MSP430_HW_DEFS_H
 
 #include <msp430.h>
-
-#if defined(__IAR_SYSTEMS_ICC__)
 #include <msp430f5xx_6xxgeneric.h>
 
+#if defined(__ICC430__)
 # define _PPTOSTR_(x) #x
 # define _PPARAM_(address) _PPTOSTR_(vector=address)
 # define INTERRUPT(isr_name, vector) \
     _Pragma(_PPARAM_(vector)) __interrupt void isr_name(void)
-
 #elif defined(__GNUC__)
-
-#include "msp430f5xx_6xxgeneric.h"
-
+# define INTERRUPT(isr_name, vector) \
+    void __attribute__ ((interrupt(vector))) isr_name(void)
 #else
-#error "Unsupported toolchain"
+# error "Unsupported toolchain"
 #endif
 
 #include <stdbool.h>

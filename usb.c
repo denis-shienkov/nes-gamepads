@@ -207,12 +207,6 @@ void usb_task(void)
     hid_ep1_task();
 }
 
-//#if defined(__IAR_SYSTEMS_ICC__)
-//#pragma vector=USB_UBM_VECTOR
-//__interrupt void usb_ubm_isr(void)
-//#elif defined(__GNUC__) && (__MSP430__)
-//void __attribute__ ((interrupt(USB_UBM_VECTOR))) usb_ubm_isr(void)
-//#endif
 INTERRUPT(usb_ubm_isr, USB_UBM_VECTOR)
 {
     bool wake_up = false;

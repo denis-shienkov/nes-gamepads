@@ -27,13 +27,16 @@ struct usb_ep {
     uint8_t EPSIZXY; // Endpoint XY buffer size.
 };
 
-#define EP1_IN_X_BUFFER_ADDRESS (0x1C80)
-
-#pragma location = USBIEPCNF_1_
+#if defined(__ICC430__)
+#pragma location = 0x23C8 // Input ep1 configuration address.
 __no_init struct usb_ep __data16 g_ep1_in;
 
-#pragma location = EP1_IN_X_BUFFER_ADDRESS
+#pragma location = 0x1C80 // Input ep1 X-buffer address.
 __no_init uint8_t __data16 g_ep1_in_xbuf[EP_MAX_PACKET_SIZE];
+#elif defined(__GNUC__)
+extern struct usb_ep g_ep1_in;
+extern uint8_t g_ep1_in_xbuf[EP_MAX_PACKET_SIZE];
+#endif
 
 static struct {
     const uint8_t data_pin;
@@ -41,8 +44,8 @@ static struct {
     uint8_t buttons;
     bool ready;
 } g_reports[HID_REPORTS_COUNT] = {
-{GPIO_DATA1_PIN, HID_REPORT_ID_GAMEPAD1, 0, false},
-{GPIO_DATA2_PIN, HID_REPORT_ID_GAMEPAD2, 0, false}
+    {GPIO_DATA1_PIN, HID_REPORT_ID_GAMEPAD1, 0, false},
+    {GPIO_DATA2_PIN, HID_REPORT_ID_GAMEPAD2, 0, false}
 };
 
 static uint16_t g_poll_counter = 0;
@@ -113,15 +116,15 @@ static void ep1_report_send(uint8_t report_index)
     g_reports[report_index].ready = false;
 }
 
-static uint8_t ep_buffer_offset_calculate(uint16_t base_address)
-{
-    return ((base_address - USBSTABUFF_) >> 3) & 0x00FF;
-}
-
 void hid_ep1_init(void)
 {
+    enum {
+        USBSTABUFF_ADDRESS = 0x1C00, // Start of buffer space address.
+        USBIEPBBAX_1_ADDRESS = 0x1C80 // Input ep1 X-buffer address.
+    };
+
     g_ep1_in.EPCNF = UBME | USBIIE;
-    g_ep1_in.EPBBAX = ep_buffer_offset_calculate(EP1_IN_X_BUFFER_ADDRESS);
+    g_ep1_in.EPBBAX = ((USBIEPBBAX_1_ADDRESS - USBSTABUFF_ADDRESS) >> 3) & 0x00FF;
     g_ep1_in.EPBCTX = NAK;
     g_ep1_in.EPSIZXY = EP_MAX_PACKET_SIZE;
 

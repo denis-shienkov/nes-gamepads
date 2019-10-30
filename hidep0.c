@@ -22,16 +22,20 @@ struct usb_ep0_data {
     bool host_ask_more_data_than_available;
 };
 
-#pragma location = USBIEPCNF_0_
+#if defined(__ICC430__)
+#pragma location = 0x0920 // Input ep0 configuration address.
 __no_init struct usb_ep0 __data16 g_ep0;
-
-#pragma location = USBIEP0BUF_
+#pragma location = 0x2378 // Input ep0 buffer address.
 __no_init uint8_t __data16 g_ep0_in_buf[EP0_MAX_PACKET_SIZE];
-
-#pragma location = USBSUBLK_
+#pragma location = 0x2380 // Setup packet block address.
 __no_init uint8_t __data16 g_setupdat[EP0_MAX_PACKET_SIZE];
+#elif defined(__GNUC__)
+extern struct usb_ep0 g_ep0;
+extern uint8_t g_ep0_in_buf[EP0_MAX_PACKET_SIZE];
+extern uint8_t g_setupdat[EP0_MAX_PACKET_SIZE];
+#endif
 
-volatile static bool g_enumerated = false;
+static volatile bool g_enumerated = false;
 static bool g_rwuen = false;
 static bool g_selfpwr = false;
 static struct usb_ep0_data g_ep0_response;

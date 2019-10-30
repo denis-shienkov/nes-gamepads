@@ -5,7 +5,7 @@ CppApplication {
         if (!qbs.architecture.contains("msp430"))
             return false;
         return qbs.toolchain.contains("iar")
-        //|| qbs.toolchain.contains("gcc")
+                || qbs.toolchain.contains("gcc")
     }
     name: "msp430f5529-nes-gamepads"
     cpp.cLanguageVersion: "c99"
@@ -21,22 +21,22 @@ CppApplication {
         property path dlibIncludePath: cpp.toolchainInstallPath + "/../lib/dlib/dl430xssfn.h"
         property path dlibRuntimePath: cpp.toolchainInstallPath + "/../lib/dlib/dl430xssfn.r43"
 
-        cpp.defines: [
-            "__MSP430F5529__"
-        ]
+        cpp.entryPoint: "__program_start"
+
+        cpp.defines: ["__MSP430F5529__"]
 
         cpp.driverFlags: [
             "-e",
             "--core=430X",
             "--data_model=small",
             "--code_model=small",
-            "--dlib_config", dlibIncludePath,
+            "--dlib_config", dlibIncludePath
         ]
 
         cpp.driverLinkerFlags: [
             "-D_STACK_SIZE=A0",
             "-D_DATA16_HEAP_SIZE=A0",
-            "-D_DATA20_HEAP_SIZE=50",
+            "-D_DATA20_HEAP_SIZE=50"
         ]
 
         cpp.staticLibraries: [
@@ -48,15 +48,33 @@ CppApplication {
 
     Group {
         condition: qbs.toolchain.contains("iar")
-        name: "IAR"
-        prefix: "iar/"
-        Group {
-            name: "Linker Script"
-            prefix: cpp.toolchainInstallPath + "/../config/linker/"
-            fileTags: ["linkerscript"]
-            // Explicitly use the default linker scripts for current target.
-            files: ["lnk430f5529.xcl", "multiplier32.xcl"]
-        }
+        name: "IAR Linker Script"
+        prefix: cpp.toolchainInstallPath + "/../config/linker/"
+        fileTags: ["linkerscript"]
+        // Explicitly use the default linker scripts for current target.
+        files: ["lnk430f5529.xcl"/*, "multiplier32.xcl"*/]
+    }
+
+    //
+    // GCC-specific properties and soucres.
+    //
+
+    Properties {
+        condition: qbs.toolchain.contains("gcc")
+        property path supportFilesPath: 'c:/msp430-gcc-support-files/include/'
+        // A path to the MSP430 support files, which are
+        // provided by the Texas Instruments separately:
+        // e.g. 'c:/msp430-gcc-support-files/include/'
+        cpp.includePaths: supportFilesPath
+        cpp.libraryPaths: supportFilesPath
+        cpp.driverFlags: ["-mmcu=msp430f5529"]
+    }
+
+    Group {
+        condition: qbs.toolchain.contains("gcc")
+        name: "GCC Linker Script"
+        fileTags: ["linkerscript"]
+        files: ["gamepads.ld"]
     }
 
     files: [
