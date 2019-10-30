@@ -1,140 +1,80 @@
 import qbs
 
 CppApplication {
-    name: "nes-gamepads"
-
-    cpp.includePaths: [
-        "Inc",
-        "Drivers/STM32F4xx_HAL_Driver/Inc",
-        "Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
-        "Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
-        "Middlewares/ST/STM32_USB_Device_Library/Class/CustomHID/Inc",
-        "Drivers/CMSIS/Device/ST/STM32F4xx/Include",
-        "Drivers/CMSIS/Include",
-    ]
-
-    cpp.defines: [
-        "USE_HAL_DRIVER",
-        "STM32F407xx",
-    ]
-
-    cpp.staticLibraries: [
-        "c",
-        "m",
-        "nosys"
-    ]
-
-    cpp.driverFlags: [
-        "-mcpu=cortex-m4",
-        "-mfpu=fpv4-sp-d16",
-        "-mthumb",
-        "-mfloat-abi=hard",
-        "-fdata-sections",
-        "-ffunction-sections",
-        "-fstack-usage",
-        "-specs=nano.specs",
-    ]
-
-    cpp.linkerFlags: [
-        "--cref",
-        "--gc-sections",
-        "--defsym=malloc_getpagesize_P=0x80",
-    ]
-
-    cpp.driverLinkerFlags: [
-        "-specs=nosys.specs",
-        "-static",
-    ]
-
+    condition: {
+        if (!qbs.architecture.contains("msp430"))
+            return false;
+        return qbs.toolchain.contains("iar")
+        //|| qbs.toolchain.contains("gcc")
+    }
+    name: "msp430f5529-nes-gamepads"
+    cpp.cLanguageVersion: "c99"
     cpp.positionIndependentCode: false
-    cpp.cLanguageVersion: "c11"
+
+    //
+    // IAR-specific properties and sources.
+    //
 
     Properties {
-        condition: qbs.debugInformation
-        cpp.commonCompilerFlags: [
-            "-gdwarf-2"
+        condition: qbs.toolchain.contains("iar")
+
+        property path dlibIncludePath: cpp.toolchainInstallPath + "/../lib/dlib/dl430xssfn.h"
+        property path dlibRuntimePath: cpp.toolchainInstallPath + "/../lib/dlib/dl430xssfn.r43"
+
+        cpp.defines: [
+            "__MSP430F5529__"
+        ]
+
+        cpp.driverFlags: [
+            "-e",
+            "--core=430X",
+            "--data_model=small",
+            "--code_model=small",
+            "--dlib_config", dlibIncludePath,
+        ]
+
+        cpp.driverLinkerFlags: [
+            "-D_STACK_SIZE=A0",
+            "-D_DATA16_HEAP_SIZE=A0",
+            "-D_DATA20_HEAP_SIZE=50",
+        ]
+
+        cpp.staticLibraries: [
+            // Explicitly link with the runtime dlib library (which contains
+            // all required startup code and other stuff).
+            dlibRuntimePath
         ]
     }
 
     Group {
-        name: "Linker scripts"
-        fileTags: ["linkerscript"]
-        files: [
-            "STM32F407VG_FLASH.ld",
-        ]
+        condition: qbs.toolchain.contains("iar")
+        name: "IAR"
+        prefix: "iar/"
+        Group {
+            name: "Linker Script"
+            prefix: cpp.toolchainInstallPath + "/../config/linker/"
+            fileTags: ["linkerscript"]
+            // Explicitly use the default linker scripts for current target.
+            files: ["lnk430f5529.xcl", "multiplier32.xcl"]
+        }
     }
 
-    Group {
-        name: "Startup"
-        prefix: "startup/"
-        files: [
-            "startup_stm32f407xx.s",
-        ]
-    }
-
-    Group {
-        name: "User"
-        prefix: "Src/"
-        files: [
-            "main.c",
-            "stm32f4xx_hal_msp.c",
-            "stm32f4xx_it.c",
-            "usb_device.c",
-            "usbd_conf.c",
-            "usbd_custom_hid_if.c",
-            "usbd_desc.c",
-        ]
-    }
-
-    Group {
-        name: "CMSIS"
-        prefix: "Src/"
-        files: [
-            "system_stm32f4xx.c",
-        ]
-    }
-
-    Group {
-        name: "UsbCore"
-        prefix: "Middlewares/ST/STM32_USB_Device_Library/Core/Src/"
-        files: [
-            "usbd_core.c",
-            "usbd_ctlreq.c",
-            "usbd_ioreq.c",
-        ]
-    }
-
-    Group {
-        name: "UsbCustomHid"
-        prefix: "Middlewares/ST/STM32_USB_Device_Library/Class/CustomHID/Src/"
-        files: [
-            "usbd_customhid.c",
-        ]
-    }
-
-    Group {
-        name: "HAL"
-        prefix: "Drivers/STM32F4xx_HAL_Driver/Src/"
-        files: [
-            "stm32f4xx_hal.c",
-            "stm32f4xx_hal_cortex.c",
-            "stm32f4xx_hal_dma.c",
-            "stm32f4xx_hal_dma_ex.c",
-            "stm32f4xx_hal_flash.c",
-            "stm32f4xx_hal_flash_ex.c",
-            "stm32f4xx_hal_flash_ramfunc.c",
-            "stm32f4xx_hal_gpio.c",
-            "stm32f4xx_hal_pcd.c",
-            "stm32f4xx_hal_pcd_ex.c",
-            "stm32f4xx_hal_pwr.c",
-            "stm32f4xx_hal_pwr_ex.c",
-            "stm32f4xx_hal_rcc.c",
-            "stm32f4xx_hal_rcc_ex.c",
-            "stm32f4xx_hal_spi.c",
-            "stm32f4xx_hal_tim.c",
-            "stm32f4xx_hal_tim_ex.c",
-            "stm32f4xx_ll_usb.c",
-        ]
-    }
-
+    files: [
+        "gpio.c",
+        "gpio.h",
+        "hid.h",
+        "hiddesc.c",
+        "hidep0.c",
+        "hidep1.c",
+        "hwdefs.h",
+        "main.c",
+        "pmm.c",
+        "pmm.h",
+        "ucs.c",
+        "ucs.h",
+        "usb.c",
+        "usb.h",
+        "wdt_a.c",
+        "wdt_a.h",
+    ]
 }
