@@ -68,7 +68,7 @@ typedef struct {
     uint8_t ButtonsMask;
 } GamePad_HidReportTypeDef;
 
-_Static_assert(sizeof(GamePad_HidReportTypeDef) == USBD_CUSTOMHID_OUTREPORT_BUF_SIZE / 2,
+_Static_assert(sizeof(GamePad_HidReportTypeDef) == USBD_CUSTOMHID_OUTREPORT_BUF_SIZE,
                "Invalid size of GamePad_HidReportTypeDef");
 
 /* USER CODE END PTD */
@@ -92,6 +92,10 @@ static GamePad_HidReportTypeDef GamepadReports[GAMEPAD_COUNT] = {
     { GAMEPAD_REPORT_ID_2, 0 } /* Second GamePad */
 };
 
+static uint8_t GamePadStates[GAMEPAD_COUNT] = {
+    0, 0
+};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,6 +112,18 @@ static void Gamepad_SomeNopCounts(uint32_t Counts)
 {
     for (volatile uint32_t Index = 0; Index < Counts; ++Index) {
         __asm__("nop");
+    }
+}
+
+static void Gamepad_SendReports()
+{
+    for (uint8_t gamepadIndex = 0; gamepadIndex < GAMEPAD_COUNT; ++gamepadIndex) {
+        if (!GamePadStates[gamepadIndex])
+            continue;
+        const uint8_t Status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, (uint8_t *)&GamepadReports[gamepadIndex], USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
+        if (Status == HAL_OK) {
+            GamePadStates[gamepadIndex] = 0;
+        }
     }
 }
 
@@ -141,12 +157,10 @@ static void Gamepad_Poll()
     GamepadReports[GAMEPAD_1].ButtonsMask = ButtonsMask1;
     GamepadReports[GAMEPAD_2].ButtonsMask = ButtonsMask2;
 
-    const uint8_t Status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, (uint8_t *)GamepadReports, USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
-    if (Status == HAL_OK) {
-        /* Do nothing */
-    } else {
-        /* Turn on RED led */
-    }
+    GamePadStates[GAMEPAD_1] = 1;
+    GamePadStates[GAMEPAD_2] = 1;
+
+    Gamepad_SendReports();
 }
 
 /* USER CODE END 0 */
