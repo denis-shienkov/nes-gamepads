@@ -3,6 +3,79 @@ import qbs
 CppApplication {
     name: "nes-gamepads"
 
+    /// GCC-specific properties.
+    Properties {
+        condition: qbs.toolchain.contains("gcc")
+        cpp.staticLibraries: [ "c", "m", "nosys" ]
+
+        cpp.driverFlags: [
+            "-mcpu=cortex-m3",
+            "-mthumb",
+            "-mfloat-abi=soft",
+            "-fdata-sections",
+            "-ffunction-sections",
+            "-fstack-usage",
+            "-specs=nano.specs",
+        ]
+
+        cpp.linkerFlags: [
+            "--cref",
+            "--gc-sections",
+            "--defsym=malloc_getpagesize_P=0x80",
+        ]
+
+        cpp.driverLinkerFlags: [
+            "-specs=nosys.specs",
+            "-static",
+        ]
+
+        cpp.commonCompilerFlags: {
+            if (qbs.debugInformation)
+                return "-gdwarf-2";
+            return "";
+        }
+    }
+
+    Group {
+        condition: qbs.toolchain.contains("gcc")
+        name: "GCC Linker Scripts"
+        fileTags: ["linkerscript"]
+        files: [ "STM32F103C8_FLASH_GCC.ld" ]
+    }
+
+    Group {
+        condition: qbs.toolchain.contains("gcc")
+        name: "GCC Startup"
+        prefix: "startup/"
+        files: [ "startup_stm32f103xb_gcc.s" ]
+    }
+
+    /// Keil-specific properties.
+
+    Properties {
+        condition: qbs.toolchain.contains("keil")
+        cpp.driverFlags: [
+            "--cpu", "cortex-m3",
+        ]
+    }
+
+    Group {
+        condition: qbs.toolchain.contains("keil")
+        name: "KEIL Linker Scripts"
+        fileTags: ["linkerscript"]
+        files: [ "STM32F103C8_FLASH_KEIL.ld" ]
+    }
+
+    Group {
+        condition: qbs.toolchain.contains("keil")
+        name: "KEIL Startup"
+        prefix: "startup/"
+        files: [ "startup_stm32f103xb_keil.s" ]
+    }
+
+    cpp.positionIndependentCode: false
+    cpp.cLanguageVersion: "c99"
+
     cpp.includePaths: [
         "Drivers/CMSIS/Device/ST/STM32F1xx/Include",
         "Drivers/CMSIS/Include",
@@ -17,59 +90,6 @@ CppApplication {
         "USE_HAL_DRIVER",
         "STM32F103xB",
     ]
-
-    cpp.staticLibraries: [
-        "c",
-        "m",
-        "nosys"
-    ]
-
-    cpp.driverFlags: [
-        "-mcpu=cortex-m3",
-        "-mthumb",
-        "-mfloat-abi=soft",
-        "-fdata-sections",
-        "-ffunction-sections",
-        "-fstack-usage",
-        "-specs=nano.specs",
-    ]
-
-    cpp.linkerFlags: [
-        "--cref",
-        "--gc-sections",
-        "--defsym=malloc_getpagesize_P=0x80",
-    ]
-
-    cpp.driverLinkerFlags: [
-        "-specs=nosys.specs",
-        "-static",
-    ]
-
-    cpp.positionIndependentCode: false
-    cpp.cLanguageVersion: "c11"
-
-    Properties {
-        condition: qbs.debugInformation
-        cpp.commonCompilerFlags: [
-            "-gdwarf-2"
-        ]
-    }
-
-    Group {
-        name: "Linker scripts"
-        fileTags: ["linkerscript"]
-        files: [
-            "STM32F103C8_FLASH.ld",
-        ]
-    }
-
-    Group {
-        name: "Startup"
-        prefix: "startup/"
-        files: [
-            "startup_stm32f103xb.s",
-        ]
-    }
 
     Group {
         name: "User"
@@ -131,5 +151,4 @@ CppApplication {
             "stm32f1xx_ll_usb.c",
         ]
     }
-
 }

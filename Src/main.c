@@ -68,8 +68,8 @@ typedef struct {
     uint8_t ButtonsMask;
 } GamePad_HidReportTypeDef;
 
-_Static_assert(sizeof(GamePad_HidReportTypeDef) == USBD_CUSTOMHID_OUTREPORT_BUF_SIZE,
-               "Invalid size of GamePad_HidReportTypeDef");
+//_Static_assert(sizeof(GamePad_HidReportTypeDef) == USBD_CUSTOMHID_OUTREPORT_BUF_SIZE,
+//               "Invalid size of GamePad_HidReportTypeDef");
 
 /* USER CODE END PTD */
 
